@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bookmark, Share2 } from 'lucide-react';
+import { BookmarkButton } from './BookmarkButton';
+import { ShareButton } from './ShareButton';
 import clsx from 'clsx';
 import { easings } from '@/lib/motion/easings';
 import { durations } from '@/lib/motion/springs';
@@ -55,18 +56,16 @@ export function ArticleCard({ article, index }: ArticleCardProps) {
       </div>
 
       <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-(--border) relative z-10">
-        <button 
-          className="p-2 rounded-full text-(--text-muted) hover:text-(--text-primary) hover:bg-[rgba(255,255,255,0.04)] transition-all"
-          aria-label="Share article"
-        >
-          <Share2 size={16} />
-        </button>
-        <button 
-          className="p-2 rounded-full text-(--text-muted) hover:text-(--accent) hover:bg-[rgba(255,255,255,0.04)] transition-all"
-          aria-label="Bookmark article"
-        >
-          <Bookmark size={16} />
-        </button>
+        <ShareButton 
+          articleId={article.id}
+          title={article.title}
+          summary={article.extract}
+        />
+        <BookmarkButton 
+          articleId={article.id}
+          title={article.title}
+          summary={article.extract}
+        />
       </div>
 
       {/* Subtle hover gradient background effect */}

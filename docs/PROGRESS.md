@@ -87,16 +87,16 @@
 ## Phase 3 — Social & Profile
 **Goal:** User knowledge layer and full social sharing infrastructure.
 
-- [ ] Bookmarks system — save, list, delete (`app/api/bookmarks` · `app/(main)/bookmarks`)
-- [ ] Reading history — log, view, search, clear (`app/(main)/profile`)
-- [ ] Knowledge stats aggregation (`app/api/user/stats/route.ts`)
-- [ ] Weekly digest generation logic
-- [ ] Topic following — explicit follow/unfollow with weight floor
-- [ ] X/Twitter thread auto-generator
-- [ ] WhatsApp OG share card (`@vercel/og` · 1200×630)
-- [ ] Instagram Story card generator (1080×1920 PNG download)
-- [ ] Web Share API + clipboard fallback (`components/sharing/ShareModal.tsx`)
-- [ ] Dynamic OG image route (`app/api/share/generate/route.ts`)
+- [x] Bookmarks system — save, list, delete (`app/api/bookmarks` · `app/(main)/bookmarks`)
+- [x] Reading history — log, view, search, clear (`app/(main)/profile`)
+- [x] Knowledge stats aggregation (`app/api/user/stats/route.ts`)
+- [x] Weekly digest generation logic
+- [x] Topic following — explicit follow/unfollow with weight floor
+- [x] X/Twitter thread auto-generator
+- [x] WhatsApp OG share card (`@vercel/og` · 1200×630)
+- [x] Instagram Story card generator (1080×1920 PNG download)
+- [x] Web Share API + clipboard fallback (`components/sharing/ShareModal.tsx`)
+- [x] Dynamic OG image route (`app/api/share/generate/route.ts`)
 
 ---
 

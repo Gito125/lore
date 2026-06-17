@@ -72,6 +72,9 @@ export async function applyDailyDecay() {
   
   await prisma.$executeRaw`
     UPDATE "InterestGraph"
-    SET weight = GREATEST(weight * ${1.0 - DAILY_DECAY_RATE}, 0.0)
+    SET weight = CASE 
+      WHEN "explicitlyFollowed" = true THEN GREATEST(weight * ${1.0 - DAILY_DECAY_RATE}, ${FOLLOW_FLOOR})
+      ELSE GREATEST(weight * ${1.0 - DAILY_DECAY_RATE}, 0.0)
+    END
   `;
 }

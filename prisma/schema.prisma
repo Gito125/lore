@@ -60,8 +60,9 @@ model InterestGraph {
   id        String   @id
   userId    String
   topic     String
-  weight    Float    @default(0.0)
-  lastHit   DateTime @default(now())
+  weight             Float    @default(0.0)
+  explicitlyFollowed Boolean  @default(false)
+  lastHit            DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
