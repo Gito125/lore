@@ -42,30 +42,30 @@
 - [x] Stitch MCP connected (`.vscode/mcp.json` · `~/.gemini/antigravity-cli/mcp.json`)
 
 ### Project Scaffold
-- [ ] Next.js 16 App Router initialized (`/app` directory structure per SRS §8)
-- [ ] TailwindCSS configured with design token CSS variables
-- [ ] Font stack loaded: EB Garamond · Inter · JetBrains Mono
-- [ ] Theme system scaffolded (5 themes via CSS custom properties — Midnight default)
-- [ ] Framer Motion installed + spring config constants (`lib/motion/springs.ts`)
-- [ ] GSAP installed + easing config constants (`lib/motion/easings.ts`)
+- [x] Next.js 16 App Router initialized (`/app` directory structure per SRS §8)
+- [x] TailwindCSS configured with design token CSS variables
+- [x] Font stack loaded: EB Garamond · Inter · JetBrains Mono
+- [x] Theme system scaffolded (5 themes via CSS custom properties — Midnight default)
+- [x] Framer Motion installed + spring config constants (`lib/motion/springs.ts`)
+- [x] GSAP installed + easing config constants (`lib/motion/easings.ts`)
 
 ### Data Layer
-- [ ] Local PostgreSQL instance running
-- [ ] Prisma initialized (`prisma/schema.prisma`)
-- [ ] All models defined: User · Account · Session · InterestGraph · ReadingHistory · Bookmarks · EngagementEvents
-- [ ] UUID v7 utility created (`lib/id.ts` → `import { uuidv7 } from 'uuidv7'`)
-- [ ] Prisma migrations run (`prisma migrate dev`)
+- [x] Local PostgreSQL instance running
+- [x] Prisma initialized (`prisma/schema.prisma`)
+- [x] All models defined: User · Account · Session · InterestGraph · ReadingHistory · Bookmarks · EngagementEvents
+- [x] UUID v7 utility created (`lib/id.ts` → `import { uuidv7 } from 'uuidv7'`)
+- [x] Prisma migrations run (`prisma migrate dev`)
 - [ ] Upstash Redis client configured (`lib/cache/redis.ts`)
 
 ### Core Features
-- [ ] Wikipedia REST API wrapper (`lib/wikipedia/api.ts`)
-- [ ] Wikipedia content parser (`lib/wikipedia/parser.ts`)
-- [ ] Feed UI shell (`app/(main)/feed/page.tsx`)
-- [ ] ArticleCard component (`components/feed/ArticleCard.tsx`) with Framer Motion enter
-- [ ] FeedSkeleton loading state (`components/feed/FeedSkeleton.tsx`)
-- [ ] Auth.js v5 configured with Prisma adapter
-- [ ] Login + Signup pages (`app/(auth)/login` · `app/(auth)/signup`)
-- [ ] Authenticated route middleware
+- [x] Wikipedia REST API wrapper (`lib/wikipedia/api.ts`)
+- [x] Wikipedia content parser (`lib/wikipedia/parser.ts`)
+- [x] Feed UI shell (`app/(main)/feed/page.tsx`)
+- [x] ArticleCard component (`components/feed/ArticleCard.tsx`) with Framer Motion enter
+- [x] FeedSkeleton loading state (`components/feed/FeedSkeleton.tsx`)
+- [x] Auth.js v5 configured with Prisma adapter
+- [x] Login + Signup pages (`app/(auth)/login` · `app/(auth)/signup`)
+- [x] Authenticated route middleware
 
 ---
 

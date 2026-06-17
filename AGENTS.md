@@ -403,7 +403,9 @@ await prisma.$transaction([
 ---
 
 ## 8. UI & Styling Rules
-- **MUST DO** When working with UI components, read all UI related skills first then proceed.
+**MUST DO**
+-  When working with UI components, read all UI related skills e.g impeccable, etc. first then proceed.
+-  Run the playwright tests after every UI change to ensure nothing is broken.
 
 ### CSS Variables — Never Hardcode Colors
 ```typescript
@@ -411,7 +413,7 @@ await prisma.$transaction([
 <div className="bg-[#0A0A0F] text-[#F0F0F5]">
 
 // ✅ Always use theme tokens
-<div className="bg-(--bg-primary) text-(--text-primary)">
+<div className="bg-bg-primary text-text-primary">
 ```
 
 ### Theme Tokens (defined in globals.css)
