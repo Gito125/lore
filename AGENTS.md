@@ -403,6 +403,7 @@ await prisma.$transaction([
 ---
 
 ## 8. UI & Styling Rules
+- **MUST DO** When working with UI components, read all UI related skills first then proceed.
 
 ### CSS Variables — Never Hardcode Colors
 ```typescript
