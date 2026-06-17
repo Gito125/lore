@@ -59,6 +59,24 @@ export default function LoginPage() {
             </svg>
             <span>{loading ? 'Connecting...' : 'Continue with Google'}</span>
           </button>
+          
+          {process.env.NEXT_PUBLIC_TEST_MODE === 'true' && (
+            <button
+              data-testid="test-login"
+              onClick={() => {
+                setLoading(true);
+                signIn('credentials', { username: 'test', password: 'test', callbackUrl: '/feed' });
+              }}
+              disabled={loading}
+              className={clsx(
+                'w-full flex items-center justify-center gap-3',
+                'py-3 px-4 bg-transparent border border-(--border)',
+                'rounded-lg font-medium text-(--text-primary) transition-all hover:bg-[rgba(255,255,255,0.02)] disabled:opacity-50'
+              )}
+            >
+              <span>Test Login</span>
+            </button>
+          )}
         </div>
 
         <p className="text-center text-sm text-(--text-muted)">

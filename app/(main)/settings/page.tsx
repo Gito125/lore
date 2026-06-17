@@ -1,4 +1,19 @@
-export default function SettingsPage() {
+import { SettingsClient } from '@/components/settings/SettingsClient';
+import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/db/prisma';
+import { redirect } from 'next/navigation';
+
+export default async function SettingsPage() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect('/login');
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { theme: true, serendipityLevel: true, notifications: true }
+  });
+
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-12">
       <div>
@@ -10,35 +25,7 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <div className="space-y-6">
-        <section className="space-y-4">
-          <h2 className="text-sm font-mono text-(--text-muted) uppercase tracking-widest border-b border-(--border) pb-2">Appearance</h2>
-          <div className="p-4 rounded-xl border border-(--border) bg-[rgba(255,255,255,0.01)] flex items-center justify-between">
-            <div>
-              <p className="text-(--text-primary) font-medium">Theme</p>
-              <p className="text-(--text-secondary) text-sm">Select your preferred visual style</p>
-            </div>
-            <select className="bg-[rgba(255,255,255,0.05)] border border-(--border) rounded-lg px-3 py-2 text-sm text-(--text-primary) outline-none focus:border-(--accent)">
-              <option value="midnight">Midnight (Default)</option>
-              <option value="obsidian">Obsidian</option>
-              <option value="parchment">Parchment</option>
-            </select>
-          </div>
-        </section>
-
-        <section className="space-y-4">
-          <h2 className="text-sm font-mono text-(--text-muted) uppercase tracking-widest border-b border-(--border) pb-2">Algorithm</h2>
-          <div className="p-4 rounded-xl border border-(--border) bg-[rgba(255,255,255,0.01)] flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-(--text-primary) font-medium">Serendipity Level</p>
-                <p className="text-(--text-secondary) text-sm">How often to show unexpected topics</p>
-              </div>
-              <input type="range" min="1" max="100" defaultValue="30" className="w-32 accent-(--accent)" />
-            </div>
-          </div>
-        </section>
-      </div>
+      <SettingsClient initialSettings={user} />
     </div>
   );
 }

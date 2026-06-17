@@ -4,52 +4,54 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { FeedSkeleton } from '@/components/feed/FeedSkeleton';
 
-// Mock function for now, will connect to API wrapper later
-async function getFeedArticles() {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  return [
-    {
-      id: '1',
-      title: 'Voynich manuscript',
-      extract: 'The Voynich manuscript is an illustrated codex hand-written in an otherwise unknown writing system, referred to as "Voynichese". The vellum on which it is written has been carbon-dated to the early 15th century.',
-      imageUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800&h=400',
-      readTime: 6,
-      category: 'History',
-    },
-    {
-      id: '2',
-      title: 'Dyatlov Pass incident',
-      extract: 'The Dyatlov Pass incident was an event in which nine Soviet trekkers died under mysterious circumstances in the northern Ural Mountains between February 1 and 2, 1959.',
-      imageUrl: 'https://images.unsplash.com/photo-1548674914-41d3e8e19c3b?auto=format&fit=crop&q=80&w=800&h=400',
-      readTime: 8,
-      category: 'Mystery',
-    },
-    {
-      id: '3',
-      title: 'Bronze Age collapse',
-      extract: 'The Late Bronze Age collapse was a time of widespread societal collapse during the 12th century BC, when nearly every city in the eastern Mediterranean was destroyed.',
-      imageUrl: 'https://images.unsplash.com/photo-1563820245084-307997a44f51?auto=format&fit=crop&q=80&w=800&h=400',
-      readTime: 12,
-      category: 'Archaeology',
-    },
-  ];
+import { FeedList } from '@/components/feed/FeedList';
+import { prisma } from '@/lib/db/prisma';
+import { getRelatedArticles, type WikipediaArticle } from '@/lib/wikipedia/api';
+import { rankArticles } from '@/lib/algorithm/scorer';
+import { headers } from 'next/headers';
+
+async function getInitialFeedArticles(userId: string) {
+  const userInterests = await prisma.interestGraph.findMany({
+    where: { userId },
+    orderBy: { weight: 'desc' },
+    take: 3
+  });
+
+  let topicsToFetch = userInterests.map(i => i.topic);
+  if (topicsToFetch.length === 0) {
+    topicsToFetch = ['Science', 'History', 'Technology'];
+  }
+
+  const currentTopic = topicsToFetch[0];
+  const related = await getRelatedArticles(currentTopic);
+  
+  const context = {
+    userInterests: userInterests.map(i => ({ topic: i.topic, weight: i.weight })),
+    recentHistorySummaries: [], 
+    sessionAvgReadTime: 180 
+  };
+
+  const scored = rankArticles(related, context);
+  const recommendations = scored.slice(0, 10);
+  
+  return recommendations.map((article: WikipediaArticle) => ({
+    id: article.id,
+    title: article.title,
+    extract: article.extract,
+    imageUrl: article.thumbnail?.source,
+    readTime: article.wordCount ? Math.max(1, Math.ceil(article.wordCount / 250)) : 5,
+    category: article.categories?.[0] || 'Uncategorized',
+  }));
 }
 
 async function FeedContent() {
   const session = await auth();
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect('/login');
   }
-  const articles = await getFeedArticles();
+  const initialArticles = await getInitialFeedArticles(session.user.id);
   
-  return (
-    <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
-      {articles.map((article, i) => (
-        <ArticleCard key={article.id} article={article} index={i} />
-      ))}
-    </div>
-  );
+  return <FeedList initialArticles={initialArticles} />;
 }
 
 export default function FeedPage() {

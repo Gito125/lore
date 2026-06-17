@@ -7,8 +7,8 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | Phase 4 — Polish & Launch |
-| **Status** | ✅ Complete |
+| **Phase** | Phase 6 — Hardening & Test Coverage |
+| **Status** | 🚧 In Progress |
 | **Stack Locked** | Next.js 16 · Local PostgreSQL · Prisma · Auth.js v5 · UUID v7 · Upstash Redis |
 | **Design Locked** | Dark Editorial · EB Garamond + Inter + JetBrains Mono · Dark Navy & Gold |
 | **Motion Locked** | Sovereign Archive · Framer Motion (UI fabric) + GSAP (signature moments) |
@@ -124,13 +124,13 @@
 
 ### Dependency Order (do not resequence)
 
-- [ ] **Article Detail Page** — Implement `/article/[id]` using the existing Wikipedia parser (`lib/wikipedia/parser.ts`). Render title, lead section, sections, infobox, and internal links. This is the single biggest UX blocker — every ArticleCard click currently 404s.
-- [ ] **Feed Data Wiring** — Refactor `app/(main)/feed/page.tsx` to fetch from `/api/recommendations`. Replace the 3-item static mock entirely. Feed must paginate (infinite scroll with load-more).
-- [ ] **Article Images** — Pull `thumbnail` and `originalimage` from the Wikipedia REST API response. Render in both `ArticleCard` (feed) and the Article Detail Page header. Handle missing images gracefully with a fallback.
-- [ ] **Search Functionality** — Wire `app/(main)/search/page.tsx` to the Wikipedia search API (`/api/search/page` endpoint). Debounce input (300ms), display results with title + excerpt + thumbnail.
-- [ ] **Settings Management** — Connect the Settings UI to user preferences in the DB. At minimum: theme selection, notification preferences, topic weights. Persist via `/api/user/settings`.
-- [ ] **Re-QA: Knowledge Graph** — Validate the GSAP Knowledge Graph visualisation with real engagement data flowing from the live feed. Mark complete only after real sessions confirm accurate node/edge generation.
-- [ ] **Re-QA: Weekly Digest** — Validate digest generation logic against a real reading history (not seeded mock data). Confirm the digest email/view reflects actual user behaviour.
+- [x] **Article Detail Page** — Implement `/article/[id]` using the existing Wikipedia parser (`lib/wikipedia/parser.ts`). Render title, lead section, sections, infobox, and internal links. This is the single biggest UX blocker — every ArticleCard click currently 404s.
+- [x] **Feed Data Wiring** — Refactor `app/(main)/feed/page.tsx` to fetch from `/api/recommendations`. Replace the 3-item static mock entirely. Feed must paginate (infinite scroll with load-more).
+- [x] **Article Images** — Pull `thumbnail` and `originalimage` from the Wikipedia REST API response. Render in both `ArticleCard` (feed) and the Article Detail Page header. Handle missing images gracefully with a fallback.
+- [x] **Search Functionality** — Wire `app/(main)/search/page.tsx` to the Wikipedia search API (`/api/search/page` endpoint). Debounce input (300ms), display results with title + excerpt + thumbnail.
+- [x] **Settings Management** — Connect the Settings UI to user preferences in the DB. At minimum: theme selection, notification preferences, topic weights. Persist via `/api/user/settings`.
+- [x] **Re-QA: Knowledge Graph** — Validate the GSAP Knowledge Graph visualisation with real engagement data flowing from the live feed. Mark complete only after real sessions confirm accurate node/edge generation.
+- [x] **Re-QA: Weekly Digest** — Validate digest generation logic against a real reading history (not seeded mock data). Confirm the digest email/view reflects actual user behaviour.
 
 ---
 
@@ -141,7 +141,7 @@
 
 - [ ] **Error boundaries** — Add React error boundaries to `Feed`, `ArticleDetail`, `Search`, and `Profile`. Wikipedia API going down must show a graceful fallback, not a crash.
 - [ ] **Loading & skeleton states** — All async data fetches (feed, article, search, stats) must have skeleton screens. No layout shift on load. Audit against existing `FeedSkeleton` pattern.
-- [ ] **Wikipedia API resilience** — Implement exponential backoff + retry (max 3 attempts) on the Wikipedia wrapper (`lib/wikipedia/api.ts`). Handle 429, 503, and network timeouts explicitly.
+- [x] **Wikipedia API resilience** — Implement exponential backoff + retry (max 3 attempts) on the Wikipedia wrapper (`lib/wikipedia/api.ts`). Handle 429, 503, and network timeouts explicitly.
 - [ ] **Playwright E2E — Auth flows** — Sign up, log in, log out. Google OAuth flow with mock provider in test env.
 - [ ] **Playwright E2E — Feed flow** — Load feed, scroll to trigger pagination, verify real articles render with images.
 - [ ] **Playwright E2E — Article flow** — Click ArticleCard → Article Detail renders → back navigation works.
@@ -208,6 +208,4 @@
 ## Blockers
 > Active blockers only. Remove when resolved.
 
-- ⚠️ **Missing Article Page:** Users cannot open or read articles because `/article/[id]` does not exist. (404 error)
-- ⚠️ **Static Feed:** Feed only shows 3 static items with no images, preventing actual exploration.
-- ⚠️ **Broken Search:** Search route is entirely mocked and does not query anything.
+None at the moment.

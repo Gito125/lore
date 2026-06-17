@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN "theme" TEXT NOT NULL DEFAULT 'midnight',
+ADD COLUMN "serendipityLevel" INTEGER NOT NULL DEFAULT 30,
+ADD COLUMN "notifications" BOOLEAN NOT NULL DEFAULT true;

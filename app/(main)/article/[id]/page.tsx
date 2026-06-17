@@ -1,6 +1,8 @@
-import { getWikipediaArticleSummary } from '@/lib/wikipedia/api';
+import { getWikipediaArticleFull } from '@/lib/wikipedia/api';
+import { parseWikipediaContent } from '@/lib/wikipedia/parser';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
 
 export default async function ArticlePage({
   params,
@@ -9,22 +11,23 @@ export default async function ArticlePage({
 }) {
   const { id } = await params;
   
-  // For the mock IDs (1, 2, 3), we'll just show a placeholder
-  // If it's a real wikipedia article, we can fetch it
   let articleTitle = 'Article Details';
-  let content = 'This is a placeholder for article ' + id;
+  let htmlContent = '<p>This is a placeholder for article ' + id + '</p>';
+  let thumbnailUrl: string | undefined;
   
-  // Try to fetch real article if ID looks like a string rather than just "1"
   if (id.length > 3) {
-    const data = await getWikipediaArticleSummary(decodeURIComponent(id));
+    const data = await getWikipediaArticleFull(decodeURIComponent(id));
     if (data) {
       articleTitle = data.title;
-      content = data.extract;
+      htmlContent = data.html ? parseWikipediaContent(data.html) : data.extract_html;
+      if (data.thumbnail) {
+        thumbnailUrl = data.thumbnail.source;
+      }
     }
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto flex flex-col gap-8">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 pb-20">
       <Link href="/feed" className="flex items-center gap-2 text-sm font-mono text-(--text-muted) hover:text-(--text-primary) transition-colors w-fit">
         <ArrowLeft className="w-4 h-4" />
         Back to Feed
@@ -35,16 +38,23 @@ export default async function ArticlePage({
           {articleTitle}
         </h1>
         
-        <div className="text-(--text-secondary) leading-relaxed">
-          {content}
-        </div>
+        {thumbnailUrl && (
+          <div className="relative w-full h-64 md:h-96 mb-8 rounded-2xl overflow-hidden border border-(--border)">
+            <Image 
+              src={thumbnailUrl} 
+              alt={articleTitle} 
+              fill 
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
+        
+        <div 
+          className="text-(--text-secondary) leading-relaxed wikipedia-content"
+          dangerouslySetInnerHTML={{ __html: htmlContent }} 
+        />
       </article>
-      
-      <div className="mt-12 p-6 bg-[rgba(26,26,46,0.3)] backdrop-blur-xl border border-dashed border-[rgba(255,255,255,0.1)] rounded-2xl">
-        <p className="text-sm font-mono text-(--text-muted) text-center">
-          Note: Full article rendering and Wikipedia data wiring is tracked in Phase 5.
-        </p>
-      </div>
     </div>
   );
 }
