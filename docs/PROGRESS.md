@@ -100,7 +100,7 @@
 
 ---
 
-## Phase 4 — Polish & Launch
+## Phase 4 — Polish
 **Goal:** Motion audit, performance, PWA, and public beta.
 
 - [x] Full theme system QA (all 5 themes across every component)
@@ -117,15 +117,77 @@
 - [x] Revert Auth.js session strategy back to `database` (from `jwt`)
 - [x] Beta launch
 
-## Phase 5 — System Completion & Real Data Wiring
-**Goal:** Hook up static UI components to real dynamic data and complete missing application views.
+## Phase 5 — Core Loop Completion
+**Goal:** Transform the app from scaffolded demo into a working product a real user can sign up, read, and explore without hitting a dead end.
 
-- [ ] **Feed Data Wiring:** Refactor `app/(main)/feed/page.tsx` to fetch dynamic recommendations from Wikipedia API instead of using the 3-item static mock.
-- [ ] **Article Images:** Ensure thumbnails/images from Wikipedia are rendered in `ArticleCard`.
-- [ ] **Article Detail Page:** Implement `/article/[id]` to render the full article content. Fixes current 404 on `/article/1`.
-- [ ] **Search Functionality:** Wire `app/(main)/search/page.tsx` to query the Wikipedia API and display actual results.
-- [ ] **Settings Management:** Make the UI controls in `/settings` actually functional and tied to user preferences (currently unmanageable placeholders).
-- [ ] **Playwright E2E:** Add comprehensive Playwright tests to cover all new routes (Feed fetching, Article detail rendering, Search flows).
+> **Completion gate:** A new user can sign up → see a real Wikipedia feed with images → click an article → read the full content → search for a topic → get real results. All without a single 404 or mock response.
+
+### Dependency Order (do not resequence)
+
+- [ ] **Redis client** — Configure `lib/cache/redis.ts` with Upstash. This makes Phase 4's "rate limiting" real. Unchecking this was the honest move; closing it now is mandatory before Phase 6 hardening.
+- [ ] **Article Detail Page** — Implement `/article/[id]` using the existing Wikipedia parser (`lib/wikipedia/parser.ts`). Render title, lead section, sections, infobox, and internal links. This is the single biggest UX blocker — every ArticleCard click currently 404s.
+- [ ] **Feed Data Wiring** — Refactor `app/(main)/feed/page.tsx` to fetch from `/api/recommendations`. Replace the 3-item static mock entirely. Feed must paginate (infinite scroll with load-more).
+- [ ] **Article Images** — Pull `thumbnail` and `originalimage` from the Wikipedia REST API response. Render in both `ArticleCard` (feed) and the Article Detail Page header. Handle missing images gracefully with a fallback.
+- [ ] **Search Functionality** — Wire `app/(main)/search/page.tsx` to the Wikipedia search API (`/api/search/page` endpoint). Debounce input (300ms), display results with title + excerpt + thumbnail.
+- [ ] **Settings Management** — Connect the Settings UI to user preferences in the DB. At minimum: theme selection, notification preferences, topic weights. Persist via `/api/user/settings`.
+- [ ] **Re-QA: Knowledge Graph** — Validate the GSAP Knowledge Graph visualisation with real engagement data flowing from the live feed. Mark complete only after real sessions confirm accurate node/edge generation.
+- [ ] **Re-QA: Weekly Digest** — Validate digest generation logic against a real reading history (not seeded mock data). Confirm the digest email/view reflects actual user behaviour.
+
+---
+
+## Phase 6 — Hardening & Test Coverage
+**Goal:** Make the app reliable under real-world conditions — API failures, slow networks, edge cases — and cover all critical paths with automated tests.
+
+> **Completion gate:** Every route has an error state. Every async fetch has a loading state. CI passes before any merge. Playwright covers the full user journey end-to-end.
+
+- [ ] **Error boundaries** — Add React error boundaries to `Feed`, `ArticleDetail`, `Search`, and `Profile`. Wikipedia API going down must show a graceful fallback, not a crash.
+- [ ] **Loading & skeleton states** — All async data fetches (feed, article, search, stats) must have skeleton screens. No layout shift on load. Audit against existing `FeedSkeleton` pattern.
+- [ ] **Wikipedia API resilience** — Implement exponential backoff + retry (max 3 attempts) on the Wikipedia wrapper (`lib/wikipedia/api.ts`). Handle 429, 503, and network timeouts explicitly.
+- [ ] **Playwright E2E — Auth flows** — Sign up, log in, log out. Google OAuth flow with mock provider in test env.
+- [ ] **Playwright E2E — Feed flow** — Load feed, scroll to trigger pagination, verify real articles render with images.
+- [ ] **Playwright E2E — Article flow** — Click ArticleCard → Article Detail renders → back navigation works.
+- [ ] **Playwright E2E — Search flow** — Type query → debounce fires → real results appear → click result → Article Detail renders.
+- [ ] **Playwright E2E — Bookmark flow** — Bookmark an article → appears in `/bookmarks` → delete → gone.
+- [ ] **PWA offline validation** — Disconnect network in browser devtools. Confirm last 20 articles + bookmarks load from service worker cache. Confirm no uncaught errors.
+- [ ] **Accessibility audit** — Run axe-core on Feed, Article, Search, Auth pages. Fix all critical and serious violations. Target WCAG 2.1 AA.
+
+---
+## Phase 7 — UI/UX Polish, Performance, motions and transitions.
+**Goal:** Refine the user experience with intentional motion, optimize performance for real-world conditions, and ensure the design system shines in every interaction.
+- [ ] **Amazing GSAP onboarding sequence** — Create a cinematic hero reveal on first visit. Animate the logo, headline, and feed cards with a signature sequence that sets the tone for the app.
+- [ ] **Framer Motion audit and addition where needed** — Review every animation and transition in the app. Ensure it follows the Sovereign Archive principles: purposeful, enhances clarity, and delights without distracting. Refine spring configs and easing curves for maximum polish.
+- [ ] **Performance optimization** — Analyze bundle size with Webpack Bundle Analyzer. Implement code-splitting and dynamic imports for heavy components (e.g., Knowledge Graph). Optimize image loading with Next.js `Image` component and proper sizing.
+- [ ] **Design system consistency** — Audit all components against the design tokens. Ensure color, typography, and spacing are consistent across the app. Refine any components that feel off-brand or inconsistent with the Dark Editorial aesthetic.
+- [ ] **Dark mode polish** — Ensure all components look great in dark mode. Pay special attention to contrast ratios, shadow usage, and how images render against the dark background. Adjust design tokens as needed for optimal dark mode experience.
+- [ ] **Micro-interactions** — Add subtle micro-interactions to key UI elements: button presses, card hovers, bookmark toggles. These should be delightful but not overdone, enhancing the tactile feel of the app.
+- [ ] **Page transitions** — Implement smooth page transitions with Framer Motion. For example, when navigating from the feed to an article, have the article card expand into the detail view. When going back, reverse the animation.
+
+
+## Phase 8 — Production Infrastructure & Public Launch
+**Goal:** Move from localhost to a live, monitored, production-grade deployment that can handle real users.
+
+> **Completion gate:** App is live on a real domain, CI/CD is automated, errors are tracked, database is hosted, and the beta gate is removed.
+
+### Infrastructure
+
+- [ ] **Hosted PostgreSQL** — Migrate from local Postgres to Neon (recommended: native Prisma integration, serverless-friendly, free tier). Run `prisma migrate deploy` against production DB. Add `DATABASE_URL` to production env.
+- [ ] **Environment config** — Define `.env.local`, `.env.staging`, `.env.production`. Document all required vars in `docs/ENV.md`. Never commit secrets.
+- [ ] **Vercel deployment** — Connect GitHub repo to Vercel. Configure build settings for Next.js 16 App Router. Set all production env vars in Vercel dashboard.
+- [ ] **Custom domain + SSL** — Point domain to Vercel. Confirm SSL certificate provisioned. Set up `www` redirect.
+- [ ] **CI/CD pipeline** — GitHub Actions workflow: lint → typecheck → unit tests → Playwright E2E → deploy to Vercel on merge to `main`. Block merge if any step fails.
+
+### Observability
+
+- [ ] **Error monitoring** — Integrate Sentry (`@sentry/nextjs`). Capture server-side and client-side errors. Set up Slack/email alerts for P0 errors.
+- [ ] **Analytics** — Integrate PostHog (recommended: self-hostable, GDPR-friendly, event-based). Track: article opens, search queries, bookmarks, session length, topic follows.
+- [ ] **Uptime monitoring** — Configure Vercel status checks or Better Uptime on `/api/health` endpoint (create this route: returns 200 + DB ping).
+
+### Launch
+
+- [ ] **Rate limit audit** — Confirm Redis-backed rate limiting is active on all API routes in production. Test with k6 or Artillery.
+- [ ] **Row Level Security — production DB** — Re-run RLS audit against Neon (not local Postgres). Confirm policies apply at DB layer, not just app layer.
+- [ ] **Remove beta gate** — Delete any `BETA_MODE` flags, invite-only guards, or WIP banners. Confirm public signup is open.
+- [ ] **Soft public launch** — Share with first real users (not just testers). Monitor Sentry + PostHog for the first 48 hours. Keep a rollback plan ready.
 
 ---
 
