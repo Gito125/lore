@@ -6,8 +6,20 @@ import { ArrowRight, BookOpen } from 'lucide-react';
 import { easings } from '@/lib/motion/easings';
 import { durations } from '@/lib/motion/springs';
 import clsx from 'clsx';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    await signIn('credentials', { email, callbackUrl: '/feed' });
+  };
+
   return (
     <main className="min-h-screen bg-(--bg-primary) flex flex-col items-center justify-center p-4">
       <motion.div
@@ -28,11 +40,14 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form className={clsx(
-          'flex flex-col gap-5 p-8',
-          'bg-(--bg-card) rounded-2xl',
-          'border border-(--border)'
-        )}>
+        <form 
+          onSubmit={handleSubmit}
+          className={clsx(
+            'flex flex-col gap-5 p-8',
+            'bg-(--bg-card) rounded-2xl',
+            'border border-(--border)'
+          )}
+        >
           <div className="space-y-5">
             <div className="space-y-2">
               <label htmlFor="email" className="text-xs uppercase tracking-widest text-(--text-muted) font-mono">
@@ -41,7 +56,10 @@ export default function LoginPage() {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
+                required
                 className={clsx(
                   'w-full px-4 py-3 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)]',
                   'rounded-lg text-(--text-primary) focus:outline-none focus:border-(--accent)',
@@ -51,15 +69,16 @@ export default function LoginPage() {
             </div>
 
             <button
-              type="button"
+              type="submit"
+              disabled={loading}
               className={clsx(
                 'mt-2 w-full group relative flex items-center justify-center gap-2',
                 'py-3 px-4 bg-(--text-primary) text-(--bg-primary)',
-                'rounded-lg font-medium transition-all hover:bg-(--text-secondary)'
+                'rounded-lg font-medium transition-all hover:bg-(--text-secondary) disabled:opacity-50'
               )}
             >
-              <span>Continue with Email</span>
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              <span>{loading ? 'Continuing...' : 'Continue with Email'}</span>
+              {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
             </button>
           </div>
 

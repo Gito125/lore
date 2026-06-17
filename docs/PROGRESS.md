@@ -113,6 +113,8 @@
 - [ ] Lighthouse score ≥ 90 all categories
 - [ ] Rate limiting on all API routes (100 req/min per IP)
 - [ ] Row Level Security audit (post-migration)
+- [ ] Replace mock local Credentials auth with real Google OAuth
+- [ ] Revert Auth.js session strategy back to `database` (from `jwt`)
 - [ ] Beta launch
 
 ---
