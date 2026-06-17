@@ -43,10 +43,11 @@ These override everything else:
 ### Completing a Task
 ```
 1. Verify the feature actually works (don't assume)
-2. Check off the item in docs/PROGRESS.md
-3. Update "Last Updated" field in docs/PROGRESS.md
-4. Create a log file in docs/logs/
-5. If a phase is now fully complete → promote Current Phase
+2. Run type checks and linting (`pnpm exec tsc --noEmit && pnpm lint`)
+3. Check off the item in docs/PROGRESS.md
+4. Update "Last Updated" field in docs/PROGRESS.md
+5. Create a log file in docs/logs/
+6. If a phase is now fully complete → promote Current Phase
 ```
 
 ### Log File Standard
@@ -581,5 +582,11 @@ type ApiError = {
 - **Wikipedia responses cached.** TTL minimum 1 hour. No live Wikipedia call should happen twice for the same content.
 
 ---
+
+## 14. Testing Rules
+- **Run tests after every minor/major change.** Don't just write tests — run them.
+- **Type checking and Linting.** Always run `pnpm exec tsc --noEmit && pnpm lint` to verify that there are no TS errors or lint warnings before completing a task.
+- **Write tests for all new features.** Ensure test coverage for critical paths.
+- **Use Playwright for end-to-end tests.** Automate user flows and interactions.
 
 *AGENTS.md is a living document. Update it when the team makes new architectural decisions — don't let it drift from reality.*
