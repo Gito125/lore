@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookmarkButton } from './BookmarkButton';
 import { ShareButton } from './ShareButton';
@@ -22,6 +23,8 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, index }: ArticleCardProps) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
@@ -39,13 +42,14 @@ export function ArticleCard({ article, index }: ArticleCardProps) {
         'transition-all duration-500 ease-out'
       )}
     >
-      {article.imageUrl && (
+      {article.imageUrl && !imgError && (
         <div className="relative w-full h-48 mb-6 rounded-xl overflow-hidden border border-[rgba(255,255,255,0.04)] bg-(--bg-secondary)">
           <Image 
             src={article.imageUrl} 
             alt={article.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            onError={() => setImgError(true)}
           />
         </div>
       )}
