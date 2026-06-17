@@ -584,10 +584,10 @@ type ApiError = {
 ---
 
 ## 14. Testing Rules
-- **Run tests after every minor/major change.** Don't just write tests — run them.
+- **Run tests after every minor/major change.** Don't just write tests — run them. Testing thoroughly is critical to ensuring a stable product.
 - **Type checking and Linting.** Always run `pnpm exec tsc --noEmit && pnpm lint` to verify that there are no TS errors or lint warnings before completing a task.
 - **Unit and Component Tests (Vitest).** Use `pnpm test` to run fast, isolated tests for utilities, hooks, and React components. Mocks should be utilized for database calls (e.g. `vi.mock('@/lib/db/prisma')`).
-- **End-to-End Tests (Playwright).** Use `pnpm test:e2e` to automate critical user flows and test Next.js routing. Ensure Playwright browsers are installed (`npx playwright install`). Ensure database is primed or endpoints mocked for authenticated flows.
-- **Write tests for all new features.** Ensure test coverage for critical paths before marking a Phase complete.
+- **End-to-End Tests (Playwright).** Use `pnpm test:e2e` to automate critical user flows and test Next.js routing. **You must use Playwright where necessary** to test real user interactions, page navigation, and authentication flows. Ensure Playwright browsers are installed (`npx playwright install`). Ensure database is primed or endpoints mocked for authenticated flows.
+- **Write tests for all new features.** Ensure test coverage for critical paths before marking a Phase complete. Do not skip testing.
 
 *AGENTS.md is a living document. Update it when the team makes new architectural decisions — don't let it drift from reality.*

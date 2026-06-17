@@ -1,5 +1,4 @@
 import { auth } from '@/lib/auth';
-import { NextRequest } from 'next/server';
 import { generateWeeklyDigest } from '@/lib/digest';
 
 export async function GET() {

@@ -117,6 +117,16 @@
 - [x] Revert Auth.js session strategy back to `database` (from `jwt`)
 - [x] Beta launch
 
+## Phase 5 — System Completion & Real Data Wiring
+**Goal:** Hook up static UI components to real dynamic data and complete missing application views.
+
+- [ ] **Feed Data Wiring:** Refactor `app/(main)/feed/page.tsx` to fetch dynamic recommendations from Wikipedia API instead of using the 3-item static mock.
+- [ ] **Article Images:** Ensure thumbnails/images from Wikipedia are rendered in `ArticleCard`.
+- [ ] **Article Detail Page:** Implement `/article/[id]` to render the full article content. Fixes current 404 on `/article/1`.
+- [ ] **Search Functionality:** Wire `app/(main)/search/page.tsx` to query the Wikipedia API and display actual results.
+- [ ] **Settings Management:** Make the UI controls in `/settings` actually functional and tied to user preferences (currently unmanageable placeholders).
+- [ ] **Playwright E2E:** Add comprehensive Playwright tests to cover all new routes (Feed fetching, Article detail rendering, Search flows).
+
 ---
 
 ## Decisions Log
@@ -137,4 +147,6 @@
 ## Blockers
 > Active blockers only. Remove when resolved.
 
-_None currently._
+- ⚠️ **Missing Article Page:** Users cannot open or read articles because `/article/[id]` does not exist. (404 error)
+- ⚠️ **Static Feed:** Feed only shows 3 static items with no images, preventing actual exploration.
+- ⚠️ **Broken Search:** Search route is entirely mocked and does not query anything.

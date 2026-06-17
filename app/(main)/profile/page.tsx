@@ -34,7 +34,7 @@ export default async function ProfilePage() {
   const totalTimeSpentMinutes = Math.floor((historyAggregation._sum.timeSpent || 0) / 60);
 
   return (
-    <main className="min-h-screen bg-(--bg-primary) py-12 px-4 md:px-0">
+    <div className="w-full">
       <div className="max-w-2xl mx-auto mb-12">
         <h1 className="text-4xl md:text-5xl font-serif text-(--text-primary) tracking-tight">
           Your Profile
@@ -50,13 +50,13 @@ export default async function ProfilePage() {
         <section>
           <h2 className="text-sm font-mono text-(--text-muted) tracking-widest uppercase mb-4">Knowledge Stats</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-(--bg-card) border border-(--border) rounded-xl p-4 flex flex-col items-center justify-center">
-              <span className="text-3xl font-serif text-(--accent)">{historyAggregation._count.id || 0}</span>
-              <span className="text-xs font-mono text-(--text-muted) uppercase mt-2">Articles Read</span>
+            <div className="bg-[rgba(26,26,46,0.5)] backdrop-blur-xl border border-[rgba(255,255,255,0.06)] rounded-2xl p-6 flex flex-col items-center justify-center hover:border-[rgba(255,255,255,0.15)] transition-colors duration-300">
+              <span className="text-4xl font-serif text-(--accent)">{historyAggregation._count.id || 0}</span>
+              <span className="text-[10px] font-mono text-(--text-muted) uppercase tracking-widest mt-3">Articles Read</span>
             </div>
-            <div className="bg-(--bg-card) border border-(--border) rounded-xl p-4 flex flex-col items-center justify-center">
-              <span className="text-3xl font-serif text-(--accent)">{totalTimeSpentMinutes}</span>
-              <span className="text-xs font-mono text-(--text-muted) uppercase mt-2">Minutes Spent</span>
+            <div className="bg-[rgba(26,26,46,0.5)] backdrop-blur-xl border border-[rgba(255,255,255,0.06)] rounded-2xl p-6 flex flex-col items-center justify-center hover:border-[rgba(255,255,255,0.15)] transition-colors duration-300">
+              <span className="text-4xl font-serif text-(--accent)">{totalTimeSpentMinutes}</span>
+              <span className="text-[10px] font-mono text-(--text-muted) uppercase tracking-widest mt-3">Minutes Spent</span>
             </div>
           </div>
         </section>
@@ -65,7 +65,9 @@ export default async function ProfilePage() {
         {topTopics.length > 0 && (
           <section>
             <h2 className="text-sm font-mono text-(--text-muted) tracking-widest uppercase mb-4">Knowledge Graph</h2>
-            <KnowledgeGraph topics={topTopics} />
+            <div className="bg-[rgba(26,26,46,0.5)] backdrop-blur-xl border border-[rgba(255,255,255,0.06)] rounded-2xl p-6">
+               <KnowledgeGraph topics={topTopics} />
+            </div>
           </section>
         )}
 
@@ -80,23 +82,23 @@ export default async function ProfilePage() {
           
           <div className="flex flex-col gap-4">
             {history.length === 0 ? (
-              <div className="text-center py-8 border border-dashed border-[rgba(255,255,255,0.1)] rounded-xl">
+              <div className="text-center py-12 bg-[rgba(26,26,46,0.3)] backdrop-blur-xl border border-dashed border-[rgba(255,255,255,0.1)] rounded-2xl">
                 <p className="text-(--text-muted) font-mono text-sm">No reading history yet.</p>
               </div>
             ) : (
               history.map(item => (
-                <div key={item.id} className="flex flex-col border-b border-(--border) pb-4 last:border-0 last:pb-0">
-                  <Link href={`/article/${item.articleId}`} className="text-base font-serif text-(--text-primary) hover:text-(--accent) transition-colors">
+                <div key={item.id} className="flex flex-col border-b border-[rgba(255,255,255,0.06)] pb-4 last:border-0 last:pb-0">
+                  <Link href={`/article/${item.articleId}`} className="text-lg font-serif text-(--text-primary) hover:text-(--accent) transition-colors">
                     {item.title}
                   </Link>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-(--text-muted) font-mono">
+                  <div className="flex items-center gap-4 mt-2">
+                    <span className="text-xs text-(--text-muted) font-mono uppercase tracking-widest">
                       {formatDistanceToNow(item.createdAt)} ago
                     </span>
-                    <span className="text-xs text-(--text-muted) font-mono">
+                    <span className="text-[10px] text-(--text-muted) font-mono uppercase tracking-widest border-l border-[rgba(255,255,255,0.1)] pl-4">
                       {item.timeSpent}s spent
                     </span>
-                    <span className="text-xs text-(--text-muted) font-mono">
+                    <span className="text-[10px] text-(--text-muted) font-mono uppercase tracking-widest border-l border-[rgba(255,255,255,0.1)] pl-4">
                       {Math.round(item.readDepth * 100)}% read
                     </span>
                   </div>
@@ -107,6 +109,6 @@ export default async function ProfilePage() {
         </section>
 
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,0 +1,46 @@
+# NEXT_PLAN: Resend Magic Links Integration
+
+## Objective
+Implement a "Magic Link" passwordless authentication flow using Resend alongside our existing Google OAuth integration. This keeps our `database` session strategy intact and provides users with a secure, frictionless login option.
+
+## Prerequisites
+- A Resend API Key.
+- A verified domain (or testing email) configured in Resend.
+- Environment variables added to `.env.local`:
+  - `RESEND_API_KEY="re_..."`
+  - `EMAIL_FROM="onboarding@resend.dev"` (or your custom domain email)
+
+## Step-by-Step Implementation Plan
+
+### 1. Install Dependencies
+Install the Resend package (helpful if we want to customize the magic link email template):
+```bash
+pnpm add resend
+```
+
+### 2. Configure Auth.js (`lib/auth.ts`)
+- Import the Resend provider: `import Resend from "next-auth/providers/resend"`.
+- Add the `Resend` provider to the `providers` array in the NextAuth configuration.
+- Wire it up to use the `RESEND_API_KEY` and `EMAIL_FROM` environment variables.
+
+### 3. Update the Authentication Pages
+- **Files:** `app/(auth)/login/page.tsx` and `app/(auth)/signup/page.tsx`.
+- **Changes:**
+  - Add an `<input type="email" />` field to accept the user's email address.
+  - Add a "Continue with Email" submit button.
+  - Implement a client-side action that calls `signIn('resend', { email, callbackUrl: '/feed', redirect: false })`.
+  - Ensure the UI handles pending states (e.g., displaying a "Check your email!" message after submission).
+  - Use `framer-motion` to gracefully animate between the "Enter Email" input state and the "Email Sent" success state.
+
+### 4. Database Schema Verification
+- Confirm that the `VerificationToken` model exists in `prisma/schema.prisma` (Already confirmed ✅). This model will be used by Prisma to temporarily store the magic link tokens.
+
+### 5. Custom Email Templates (Optional Polish)
+- Auth.js provides a standard, plain-text magic link email by default.
+- *Phase 4 Polish:* We can customize the `sendVerificationRequest` callback inside `lib/auth.ts` to send a beautifully styled HTML email that matches Lore's "Dark Editorial" design system.
+
+## Success Criteria
+- [ ] Users can enter an email address on the login/signup page.
+- [ ] An email containing a magic link is successfully delivered via Resend.
+- [ ] Clicking the link successfully authenticates the user and creates a session in PostgreSQL.
+- [ ] The user is seamlessly redirected to the `/feed` page.

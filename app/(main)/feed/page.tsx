@@ -13,6 +13,7 @@ async function getFeedArticles() {
       id: '1',
       title: 'Voynich manuscript',
       extract: 'The Voynich manuscript is an illustrated codex hand-written in an otherwise unknown writing system, referred to as "Voynichese". The vellum on which it is written has been carbon-dated to the early 15th century.',
+      imageUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800&h=400',
       readTime: 6,
       category: 'History',
     },
@@ -20,6 +21,7 @@ async function getFeedArticles() {
       id: '2',
       title: 'Dyatlov Pass incident',
       extract: 'The Dyatlov Pass incident was an event in which nine Soviet trekkers died under mysterious circumstances in the northern Ural Mountains between February 1 and 2, 1959.',
+      imageUrl: 'https://images.unsplash.com/photo-1548674914-41d3e8e19c3b?auto=format&fit=crop&q=80&w=800&h=400',
       readTime: 8,
       category: 'Mystery',
     },
@@ -27,6 +29,7 @@ async function getFeedArticles() {
       id: '3',
       title: 'Bronze Age collapse',
       extract: 'The Late Bronze Age collapse was a time of widespread societal collapse during the 12th century BC, when nearly every city in the eastern Mediterranean was destroyed.',
+      imageUrl: 'https://images.unsplash.com/photo-1563820245084-307997a44f51?auto=format&fit=crop&q=80&w=800&h=400',
       readTime: 12,
       category: 'Archaeology',
     },
@@ -51,7 +54,7 @@ async function FeedContent() {
 
 export default function FeedPage() {
   return (
-    <main className="min-h-screen bg-(--bg-primary) py-12 px-4 md:px-0">
+    <div className="w-full">
       <div className="max-w-2xl mx-auto mb-12">
         <h1 className="text-4xl md:text-5xl font-serif text-(--text-primary) tracking-tight">
           Your Feed
@@ -64,6 +67,6 @@ export default function FeedPage() {
       <Suspense fallback={<FeedSkeleton />}>
         <FeedContent />
       </Suspense>
-    </main>
+    </div>
   );
 }

@@ -7,9 +7,10 @@ import { newId } from '@/lib/id';
 const baseAdapter = PrismaAdapter(prisma);
 const customAdapter = {
   ...baseAdapter,
-  createUser: (data: any) => baseAdapter.createUser!({ ...data, id: newId() }),
-  linkAccount: (data: any) => baseAdapter.linkAccount!({ ...data, id: newId() }),
-  createSession: (data: any) => baseAdapter.createSession!({ ...data, id: newId() }),
+  createUser: (data: Parameters<NonNullable<typeof baseAdapter.createUser>>[0]) => baseAdapter.createUser!({ ...data, id: newId() }),
+  linkAccount: (data: Parameters<NonNullable<typeof baseAdapter.linkAccount>>[0]) => baseAdapter.linkAccount!({ ...data, id: newId() }),
+  // @ts-expect-error Auth.js types don't include custom ID but our DB requires it
+  createSession: (data: Parameters<NonNullable<typeof baseAdapter.createSession>>[0]) => baseAdapter.createSession!({ ...data, id: newId() }),
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
