@@ -49,17 +49,19 @@ export default function SignupPage() {
             />
           </div>
 
-          <button
-            type="button"
-            className={clsx(
-              'mt-2 w-full group relative flex items-center justify-center gap-2',
-              'py-3 px-4 bg-(--text-primary) text-(--bg-primary)',
-              'rounded-lg font-medium transition-all hover:bg-(--text-secondary)'
-            )}
-          >
-            <span>Create Account</span>
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          <Link href="/onboarding" className="w-full">
+            <button
+              type="button"
+              className={clsx(
+                'mt-2 w-full group relative flex items-center justify-center gap-2',
+                'py-3 px-4 bg-(--text-primary) text-(--bg-primary)',
+                'rounded-lg font-medium transition-all hover:bg-(--text-secondary)'
+              )}
+            >
+              <span>Create Account</span>
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
 
           <div className="relative flex items-center justify-center mt-2">
             <div className="absolute inset-0 flex items-center">

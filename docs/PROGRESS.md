@@ -7,7 +7,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | Phase 1 — Foundation |
+| **Phase** | Phase 3 — Social & Profile |
 | **Status** | 🔄 In Progress |
 | **Stack Locked** | Next.js 16 · Local PostgreSQL · Prisma · Auth.js v5 · UUID v7 · Upstash Redis |
 | **Design Locked** | Dark Editorial · EB Garamond + Inter + JetBrains Mono · Dark Navy & Gold |
@@ -72,15 +72,15 @@
 ## Phase 2 — Algorithm
 **Goal:** Multi-signal scoring engine, interest graph, and behavioral tracking.
 
-- [ ] Scoring engine (`lib/algorithm/scorer.ts`) — all 5 signals per SRS §5
-- [ ] Interest graph with temporal decay (`lib/algorithm/interest-graph.ts`)
-- [ ] Serendipity injection layer (`lib/algorithm/serendipity.ts`)
-- [ ] TF-IDF semantic similarity (`lib/algorithm/semantic.ts`)
-- [ ] Engagement tracking API route (`app/api/engage/route.ts`)
-- [ ] Scroll depth + time-on-article tracking hooks (`hooks/useEngagement.ts`)
-- [ ] Algorithm WebWorker (`workers/algorithm.worker.ts`)
-- [ ] Topic onboarding flow (min. 3 topics on signup)
-- [ ] `/api/recommendations` route returning sidebar articles
+- [x] Scoring engine (`lib/algorithm/scorer.ts`) — all 5 signals per SRS §5
+- [x] Interest graph with temporal decay (`lib/algorithm/interest-graph.ts`)
+- [x] Serendipity injection layer (`lib/algorithm/serendipity.ts`)
+- [x] TF-IDF semantic similarity (`lib/algorithm/semantic.ts`)
+- [x] Engagement tracking API route (`app/api/engage/route.ts`)
+- [x] Scroll depth + time-on-article tracking hooks (`hooks/useEngagement.ts`)
+- [x] Algorithm WebWorker (`workers/algorithm.worker.ts`)
+- [x] Topic onboarding flow (min. 3 topics on signup)
+- [x] `/api/recommendations` route returning sidebar articles
 
 ---
 
