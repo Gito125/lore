@@ -24,7 +24,7 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
         'Api-User-Agent': 'LoreApp/1.0 (Contact: admin@example.com)'
       },
       // Using Next.js fetch caching directly
-      next: { revalidate: 3600 } 
+      // next: { revalidate: 3600 } 
     });
 
     if (!res.ok) {
