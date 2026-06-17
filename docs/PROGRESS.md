@@ -65,7 +65,7 @@
 - [x] FeedSkeleton loading state (`components/feed/FeedSkeleton.tsx`)
 - [x] Auth.js v5 configured with Prisma adapter
 - [x] Login + Signup pages (`app/(auth)/login` · `app/(auth)/signup`)
-- [x] Authenticated route middleware
+- [x] Authenticated route middleware/proxy (`proxy.ts`)
 
 ---
 
