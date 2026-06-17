@@ -124,7 +124,6 @@
 
 ### Dependency Order (do not resequence)
 
-- [ ] **Redis client** — Configure `lib/cache/redis.ts` with Upstash. This makes Phase 4's "rate limiting" real. Unchecking this was the honest move; closing it now is mandatory before Phase 6 hardening.
 - [ ] **Article Detail Page** — Implement `/article/[id]` using the existing Wikipedia parser (`lib/wikipedia/parser.ts`). Render title, lead section, sections, infobox, and internal links. This is the single biggest UX blocker — every ArticleCard click currently 404s.
 - [ ] **Feed Data Wiring** — Refactor `app/(main)/feed/page.tsx` to fetch from `/api/recommendations`. Replace the 3-item static mock entirely. Feed must paginate (infinite scroll with load-more).
 - [ ] **Article Images** — Pull `thumbnail` and `originalimage` from the Wikipedia REST API response. Render in both `ArticleCard` (feed) and the Article Detail Page header. Handle missing images gracefully with a fallback.

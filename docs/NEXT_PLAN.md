@@ -44,3 +44,29 @@ pnpm add resend
 - [ ] An email containing a magic link is successfully delivered via Resend.
 - [ ] Clicking the link successfully authenticates the user and creates a session in PostgreSQL.
 - [ ] The user is seamlessly redirected to the `/feed` page.
+
+---
+
+## Redis & Rate Limiting Implementation
+
+The Redis and Rate Limiting features using Upstash were removed from the initial setup to simplify the current development phase. They should be reintroduced prior to production or public launch.
+
+**Implementation Plan:**
+
+1. **Re-install Dependencies:**
+   ```bash
+   pnpm add @upstash/redis @upstash/ratelimit
+   ```
+
+2. **Configure Redis Client (`lib/cache/redis.ts`):**
+   - Create a Redis client instance that strictly requires `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` environment variables.
+
+3. **Configure Rate Limiter (`lib/cache/rate-limit.ts`):**
+   - Setup a sliding window rate limiter (e.g., 100 requests per 1 minute).
+
+4. **Integrate into Middleware (`proxy.ts`):**
+   - Add the rate limiter back into the API routes interception block within `proxy.ts` to protect against spam or brute-force attacks.
+
+5. **Update Documentation:**
+   - Ensure the `.env.example` or `docs/ENV.md` reflects the required Upstash keys.
+   - Run a rate limit audit (as noted in Phase 8 of PROGRESS.md) to ensure endpoints are adequately protected.
