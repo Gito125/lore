@@ -81,7 +81,7 @@ Anything that's intentionally incomplete or deferred.
 
 | Layer | Technology | Notes |
 |-------|-----------|-------|
-| Framework | Next.js 15 (App Router) | See §0 for v15 specifics |
+| Framework | Next.js 16 (App Router) | See §0 for v15 specifics |
 | Language | TypeScript (strict mode) | `any` is banned |
 | Styling | TailwindCSS + CSS Variables | No inline styles, no ad-hoc colors |
 | ORM | Prisma | All DB access goes through Prisma client |
@@ -91,6 +91,7 @@ Anything that's intentionally incomplete or deferred.
 | Cache | Upstash Redis | All Wikipedia API responses cached here |
 | Motion | Framer Motion + GSAP | See §8 for which to use when |
 | Testing | Vitest (unit) + Playwright (E2E) | |
+| Package Management | pnpm | No npm or yarn — pnpm only |
 
 **If a library not listed here is needed:** Document the decision in your log file with justification. Do not just install it silently.
 
