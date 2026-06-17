@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db/prisma';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import { KnowledgeGraph } from '@/components/profile/KnowledgeGraph';
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -60,17 +61,11 @@ export default async function ProfilePage() {
           </div>
         </section>
 
-        {/* Top Topics */}
+        {/* Top Topics / Knowledge Graph */}
         {topTopics.length > 0 && (
           <section>
-            <h2 className="text-sm font-mono text-(--text-muted) tracking-widest uppercase mb-4">Top Interests</h2>
-            <div className="flex flex-wrap gap-2">
-              {topTopics.map(topic => (
-                <span key={topic.id} className="bg-[rgba(255,255,255,0.04)] text-(--text-secondary) px-3 py-1.5 rounded-full text-sm font-medium border border-(--border)">
-                  {topic.topic}
-                </span>
-              ))}
-            </div>
+            <h2 className="text-sm font-mono text-(--text-muted) tracking-widest uppercase mb-4">Knowledge Graph</h2>
+            <KnowledgeGraph topics={topTopics} />
           </section>
         )}
 

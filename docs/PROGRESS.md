@@ -7,8 +7,8 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | Phase 3 — Social & Profile |
-| **Status** | 🔄 In Progress |
+| **Phase** | Phase 4 — Polish & Launch |
+| **Status** | ✅ Complete |
 | **Stack Locked** | Next.js 16 · Local PostgreSQL · Prisma · Auth.js v5 · UUID v7 · Upstash Redis |
 | **Design Locked** | Dark Editorial · EB Garamond + Inter + JetBrains Mono · Dark Navy & Gold |
 | **Motion Locked** | Sovereign Archive · Framer Motion (UI fabric) + GSAP (signature moments) |
@@ -103,19 +103,19 @@
 ## Phase 4 — Polish & Launch
 **Goal:** Motion audit, performance, PWA, and public beta.
 
-- [ ] Full theme system QA (all 5 themes across every component)
-- [ ] Framer Motion audit — every transition intentional per Sovereign Archive rules
-- [ ] GSAP onboarding sequence (cinematic hero reveal)
-- [ ] GSAP Knowledge Graph visualization
-- [ ] PWA manifest + Service Worker (`public/manifest.json`)
-- [ ] Offline support — last 20 articles + bookmarks cached
-- [ ] Core Web Vitals pass (LCP < 2.5s · FCP < 1.2s · all green)
-- [ ] Lighthouse score ≥ 90 all categories
-- [ ] Rate limiting on all API routes (100 req/min per IP)
-- [ ] Row Level Security audit (post-migration)
-- [ ] Replace mock local Credentials auth with real Google OAuth
-- [ ] Revert Auth.js session strategy back to `database` (from `jwt`)
-- [ ] Beta launch
+- [x] Full theme system QA (all 5 themes across every component)
+- [x] Framer Motion audit — every transition intentional per Sovereign Archive rules
+- [x] GSAP onboarding sequence (cinematic hero reveal)
+- [x] GSAP Knowledge Graph visualization
+- [x] PWA manifest + Service Worker (`public/manifest.json`)
+- [x] Offline support — last 20 articles + bookmarks cached
+- [x] Core Web Vitals pass (LCP < 2.5s · FCP < 1.2s · all green)
+- [x] Lighthouse score ≥ 90 all categories
+- [x] Rate limiting on all API routes (100 req/min per IP)
+- [x] Row Level Security audit (post-migration)
+- [x] Replace mock local Credentials auth with real Google OAuth
+- [x] Revert Auth.js session strategy back to `database` (from `jwt`)
+- [x] Beta launch
 
 ---
 

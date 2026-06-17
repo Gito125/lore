@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { easings } from '@/lib/motion/easings';
 import { durations } from '@/lib/motion/springs';
 import clsx from 'clsx';
@@ -10,15 +10,7 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 
 export default function SignupPage() {
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setLoading(true);
-    await signIn('credentials', { email, callbackUrl: '/onboarding' });
-  };
 
   return (
     <main className="min-h-screen bg-(--bg-primary) flex flex-col items-center justify-center p-4">
@@ -40,61 +32,23 @@ export default function SignupPage() {
           </p>
         </div>
 
-        <form 
-          onSubmit={handleSubmit}
+        <div 
           className={clsx(
             'flex flex-col gap-5 p-8',
             'bg-(--bg-card) rounded-2xl',
             'border border-(--border)'
           )}
         >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-xs uppercase tracking-widest text-(--text-muted) font-mono">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              className={clsx(
-                'w-full px-4 py-3 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)]',
-                'rounded-lg text-(--text-primary) focus:outline-none focus:border-(--accent)',
-                'transition-colors placeholder:text-[rgba(255,255,255,0.2)]'
-              )}
-            />
-          </div>
-
           <button
-            type="submit"
+            onClick={() => {
+              setLoading(true);
+              signIn('google', { callbackUrl: '/onboarding' });
+            }}
             disabled={loading}
-            className={clsx(
-              'mt-2 w-full group relative flex items-center justify-center gap-2',
-              'py-3 px-4 bg-(--text-primary) text-(--bg-primary)',
-              'rounded-lg font-medium transition-all hover:bg-(--text-secondary) disabled:opacity-50'
-            )}
-          >
-            <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
-            {!loading && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
-          </button>
-
-          <div className="relative flex items-center justify-center mt-2">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-(--border)" />
-            </div>
-            <div className="relative px-3 bg-(--bg-card) text-xs uppercase tracking-widest text-(--text-muted) font-mono">
-              or
-            </div>
-          </div>
-
-          <button
-            type="button"
             className={clsx(
               'w-full flex items-center justify-center gap-3',
               'py-3 px-4 bg-transparent border border-(--border)',
-              'rounded-lg font-medium text-(--text-primary) transition-all hover:bg-[rgba(255,255,255,0.02)]'
+              'rounded-lg font-medium text-(--text-primary) transition-all hover:bg-[rgba(255,255,255,0.02)] disabled:opacity-50'
             )}
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
@@ -103,9 +57,9 @@ export default function SignupPage() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
             </svg>
-            <span>Continue with Google</span>
+            <span>{loading ? 'Connecting...' : 'Continue with Google'}</span>
           </button>
-        </form>
+        </div>
 
         <p className="text-center text-sm text-(--text-muted)">
           Already have an account?{' '}

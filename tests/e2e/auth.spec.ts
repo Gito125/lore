@@ -8,7 +8,7 @@ test('redirects unauthenticated users to login from protected routes', async ({ 
   await expect(page).toHaveURL(/.*\/login/);
   
   // Verify login page renders
-  await expect(page.locator('h1')).toContainText('Login');
+  await expect(page.locator('h1')).toContainText('Welcome back');
 });
 
 test('redirects unauthenticated users to login from bookmarks route', async ({ page }) => {

@@ -10,7 +10,7 @@ const createBookmarkSchema = z.object({
   summary: z.string().optional()
 });
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const session = await auth();
   if (!session?.user?.id) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     });
     return Response.json({ bookmarks });
-  } catch (error) {
+  } catch {
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -15,7 +15,7 @@ describe('BookmarkButton', () => {
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => ({ isBookmarked: true }),
-    } as any);
+    } as unknown as Response);
 
     render(<BookmarkButton articleId="123" title="Test" />);
 
@@ -33,7 +33,7 @@ describe('BookmarkButton', () => {
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => ({ isBookmarked: false }),
-    } as any);
+    } as unknown as Response);
 
     render(<BookmarkButton articleId="123" title="Test" />);
 
@@ -48,7 +48,7 @@ describe('BookmarkButton', () => {
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => ({ bookmark: { id: 'b1' } }),
-    } as any);
+    } as unknown as Response);
 
     fireEvent.click(button);
 

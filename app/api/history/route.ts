@@ -18,12 +18,12 @@ export async function GET(request: NextRequest) {
       take: limit
     });
     return Response.json({ history });
-  } catch (error) {
+  } catch {
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   const session = await auth();
   if (!session?.user?.id) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
@@ -34,7 +34,7 @@ export async function DELETE(request: NextRequest) {
       where: { userId: session.user.id }
     });
     return Response.json({ success: true });
-  } catch (error) {
+  } catch {
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

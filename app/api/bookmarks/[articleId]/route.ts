@@ -24,7 +24,7 @@ export async function GET(
     });
 
     return Response.json({ isBookmarked: !!bookmark });
-  } catch (error) {
+  } catch {
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

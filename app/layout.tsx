@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 
 const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
@@ -20,6 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Lore",
   description: "Wikipedia as a Social Experience",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -33,7 +35,10 @@ export default function RootLayout({
       className={`${ebGaramond.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
       data-theme="midnight"
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <ServiceWorkerRegistration />
+        {children}
+      </body>
     </html>
   );
 }
