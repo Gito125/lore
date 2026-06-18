@@ -16,11 +16,12 @@ const customAdapter = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: customAdapter,
+  trustHost: true,
   session: { strategy: process.env.NODE_ENV !== 'production' ? 'jwt' : 'database' },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || 'mock',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'mock',
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       allowDangerousEmailAccountLinking: true,
     }),
     ...(process.env.NODE_ENV !== 'production' ? [
@@ -48,6 +49,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/login',
     newUser: '/onboarding',
+    error: '/login',
   },
   callbacks: {
     session({ session, token, user }) {

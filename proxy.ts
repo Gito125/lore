@@ -25,5 +25,6 @@ export default auth(async (req) => {
 });
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  // Keep Auth.js routes out of the proxy so OAuth callbacks are not intercepted.
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

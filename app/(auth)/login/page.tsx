@@ -8,9 +8,24 @@ import { durations } from '@/lib/motion/springs';
 import clsx from 'clsx';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  Configuration: 'Google sign-in is temporarily unavailable. Check your connection and try again.',
+  OAuthSignin: 'Could not start Google sign-in. Please try again.',
+  OAuthCallback: 'Google sign-in failed during the callback. Please try again.',
+  OAuthAccountNotLinked: 'That Google account is already linked to another user.',
+  AccessDenied: 'Access was denied. Please try again or use another account.',
+  Default: 'Sign-in failed. Please try again.',
+};
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const authError = searchParams.get('error');
+  const errorMessage = authError
+    ? AUTH_ERROR_MESSAGES[authError] ?? AUTH_ERROR_MESSAGES.Default
+    : null;
 
   return (
     <main className="min-h-screen bg-(--bg-primary) flex flex-col items-center justify-center p-4">
@@ -39,6 +54,11 @@ export default function LoginPage() {
             'border border-(--border)'
           )}
         >
+          {errorMessage && (
+            <p className="text-sm text-red-400 text-center" role="alert">
+              {errorMessage}
+            </p>
+          )}
           <button
             onClick={() => {
               setLoading(true);

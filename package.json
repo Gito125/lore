@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--dns-result-order=ipv4first' next dev -p 3005",
+    "dev": "NODE_OPTIONS='--dns-result-order=ipv4first' NO_PROXY='127.0.0.1,localhost,.google.com,.googleapis.com' next dev -p 3005",
     "build": "next build -p 3005",
     "start": "next start -p 3005",
     "lint": "eslint",
