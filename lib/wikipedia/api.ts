@@ -57,7 +57,7 @@ async function fetchWithRetry(url: string, options: RequestInit = {}): Promise<R
 }
 
 export async function getWikipediaArticleSummary(title: string): Promise<WikipediaArticle | null> {
-  if (process.env.NEXT_PUBLIC_TEST_MODE === 'true') {
+  if (process.env.USE_MOCK_WIKI === 'true') {
     return {
       id: title,
       title,
@@ -106,7 +106,7 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
 }
 
 export async function getRelatedArticles(title: string): Promise<WikipediaArticle[]> {
-  if (process.env.NEXT_PUBLIC_TEST_MODE === 'true') {
+  if (process.env.USE_MOCK_WIKI === 'true') {
     return Array.from({ length: 15 }).map((_, i) => ({
       id: `mock-${title}-${i}`,
       title: `${title} Mock Related ${i}`,
@@ -189,7 +189,7 @@ export async function getRelatedArticles(title: string): Promise<WikipediaArticl
 }
 
 export async function getWikipediaArticleFull(title: string): Promise<WikipediaArticle | null> {
-  if (process.env.NEXT_PUBLIC_TEST_MODE === 'true') {
+  if (process.env.USE_MOCK_WIKI === 'true') {
     return getWikipediaArticleSummary(title);
   }
 
