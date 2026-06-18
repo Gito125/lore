@@ -59,7 +59,6 @@ export default function LoginPage() {
             </svg>
             <span>{loading ? 'Connecting...' : 'Continue with Google'}</span>
           </button>
-          
           {process.env.NEXT_PUBLIC_TEST_MODE === 'true' && (
             <button
               data-testid="test-login"

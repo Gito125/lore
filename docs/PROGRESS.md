@@ -12,7 +12,7 @@
 | **Stack Locked** | Next.js 16 · Local PostgreSQL · Prisma · Auth.js v5 · UUID v7 · Upstash Redis |
 | **Design Locked** | Dark Editorial · EB Garamond + Inter + JetBrains Mono · Dark Navy & Gold |
 | **Motion Locked** | Sovereign Archive · Framer Motion (UI fabric) + GSAP (signature moments) |
-| **Last Updated** | June 2026 |
+| **Last Updated** | June 18, 2026 |
 
 ---
 

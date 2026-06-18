@@ -100,6 +100,7 @@ export function SearchClient() {
                       src={result.thumbnail.url.startsWith('//') ? `https:${result.thumbnail.url}` : result.thumbnail.url}
                       alt={result.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 100px"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>

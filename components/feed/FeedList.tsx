@@ -25,12 +25,12 @@ function mapToFeedArticle(article: WikipediaArticle): FeedArticle {
   };
 }
 
-export function FeedList({ initialArticles }: { initialArticles: FeedArticle[] }) {
+export function FeedList({ initialArticles }: FeedListProps) {
   const [articles, setArticles] = useState<FeedArticle[]>(initialArticles);
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  
+  const [hasMore, setHasMore] = useState(initialArticles.length >= 10);
+  const [refreshCount, setRefreshCount] = useState(0);
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const loadMore = useCallback(async () => {
@@ -55,6 +55,30 @@ export function FeedList({ initialArticles }: { initialArticles: FeedArticle[] }
     }
   }, [page]);
 
+  const refreshFeed = async () => {
+    setLoading(true);
+    setHasMore(true);
+    setRefreshCount(prev => prev + 1);
+    try {
+      const res = await fetch(`/api/recommendations?page=1`);
+      if (!res.ok) throw new Error('Failed to refresh feed');
+      const data = await res.json();
+      
+      if (data.recommendations && data.recommendations.length > 0) {
+        const mapped = data.recommendations.map(mapToFeedArticle);
+        setArticles(mapped);
+        setPage(data.nextPage || 2);
+      } else {
+        setHasMore(false);
+        setArticles([]);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !loading && hasMore) {
@@ -68,8 +92,18 @@ export function FeedList({ initialArticles }: { initialArticles: FeedArticle[] }
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
+      <div className="flex justify-end mb-2">
+        <button 
+          onClick={refreshFeed}
+          disabled={loading}
+          className="text-sm font-mono tracking-widest uppercase px-4 py-2 rounded-lg border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.06)] hover:text-(--accent) transition-all text-(--text-secondary) disabled:opacity-50"
+        >
+          {loading ? 'Refreshing...' : 'Refresh Feed'}
+        </button>
+      </div>
+
       {articles.map((article, i) => (
-        <ArticleCard key={`${article.id}-${i}`} article={article} index={i} />
+        <ArticleCard key={`${article.id}-${i}-${refreshCount}`} article={article} index={i} />
       ))}
       
       {hasMore && (

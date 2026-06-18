@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { signOut } from 'next-auth/react';
 
 interface UserSettings {
   theme: string;
@@ -101,6 +102,27 @@ export function SettingsClient({ initialSettings }: { initialSettings: UserSetti
             <div className="w-11 h-6 bg-[rgba(255,255,255,0.1)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-(--accent)"></div>
           </label>
         </div>
+      </section>
+      <section className="space-y-4">
+        <h2 className="text-sm font-mono text-(--text-muted) uppercase tracking-widest border-b border-(--border) pb-2">Content</h2>
+        <div className="p-4 rounded-xl border border-(--border) bg-[rgba(255,255,255,0.01)] flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between hover:bg-[rgba(255,255,255,0.03)] transition-colors cursor-pointer group" onClick={() => window.location.href = '/settings/interests'}>
+          <div>
+            <p className="text-(--text-primary) font-medium">Manage Interests</p>
+            <p className="text-(--text-secondary) text-sm">Update topics to fine-tune your personalized feed</p>
+          </div>
+          <div className="px-4 py-2 rounded-lg bg-[rgba(255,255,255,0.05)] text-(--text-primary) text-sm font-medium group-hover:bg-(--accent) transition-colors">
+            Configure
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-4 pt-6">
+        <button 
+          onClick={() => signOut({ callbackUrl: '/' })}
+          className="w-full sm:w-auto px-6 py-3 rounded-xl border border-[rgba(255,100,100,0.2)] text-red-400 hover:bg-[rgba(255,100,100,0.05)] transition-colors font-medium text-sm flex items-center justify-center gap-2"
+        >
+          Sign Out
+        </button>
       </section>
     </div>
   );

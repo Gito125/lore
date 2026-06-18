@@ -90,7 +90,7 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
     
     // Transform and structure the response
     const article: WikipediaArticle = {
-      id: data.pageid?.toString() || title,
+      id: data.title,
       title: data.title,
       extract: data.extract,
       extract_html: data.extract_html,
@@ -160,7 +160,7 @@ export async function getRelatedArticles(title: string): Promise<WikipediaArticl
         : [];
 
       return {
-        id: page.pageid?.toString() || page.title,
+        id: page.title,
         title: page.title,
         extract: extractText,
         extract_html: extractHtml,

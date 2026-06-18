@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookmarkButton } from './BookmarkButton';
 import { ShareButton } from './ShareButton';
+import { LikeButton } from './LikeButton';
 import clsx from 'clsx';
 import { easings } from '@/lib/motion/easings';
 import { durations } from '@/lib/motion/springs';
@@ -48,6 +49,7 @@ export function ArticleCard({ article, index }: ArticleCardProps) {
             src={article.imageUrl} 
             alt={article.title}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             onError={() => setImgError(true)}
           />
@@ -76,6 +78,10 @@ export function ArticleCard({ article, index }: ArticleCardProps) {
       </div>
 
       <div className="flex items-center justify-end gap-4 mt-6 pt-6 border-t border-[rgba(255,255,255,0.06)] relative z-10">
+        <LikeButton
+          articleId={article.id}
+          title={article.title}
+        />
         <ShareButton 
           articleId={article.id}
           title={article.title}

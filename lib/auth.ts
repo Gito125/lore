@@ -16,14 +16,14 @@ const customAdapter = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: customAdapter,
-  session: { strategy: process.env.NEXT_PUBLIC_TEST_MODE === 'true' ? 'jwt' : 'database' },
+  session: { strategy: process.env.NODE_ENV !== 'production' ? 'jwt' : 'database' },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || 'mock',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'mock',
       allowDangerousEmailAccountLinking: true,
     }),
-    ...(process.env.NEXT_PUBLIC_TEST_MODE === 'true' ? [
+    ...(process.env.NODE_ENV !== 'production' ? [
       CredentialsProvider({
         name: 'Test',
         credentials: {

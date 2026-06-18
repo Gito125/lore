@@ -17,6 +17,7 @@ model User {
   bookmarks     Bookmark[]
   history       ReadingHistory[]
   events        EngagementEvent[]
+  likes         Like[]
   theme             String    @default("midnight")
   serendipityLevel  Int       @default(30)
   notifications     Boolean   @default(true)
@@ -41,6 +42,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -49,6 +51,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -70,6 +74,7 @@ model InterestGraph {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, topic])
+  @@index([userId])
 }
 
 model ReadingHistory {
@@ -82,6 +87,7 @@ model ReadingHistory {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
 }
 
 model Bookmark {
@@ -94,6 +100,7 @@ model Bookmark {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, articleId])
+  @@index([userId])
 }
 
 model EngagementEvent {
@@ -105,4 +112,18 @@ model EngagementEvent {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([userId, eventType])
+}
+
+model Like {
+  id        String   @id
+  userId    String
+  articleId String
+  title     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, articleId])
+  @@index([userId])
 }
