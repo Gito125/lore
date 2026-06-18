@@ -45,7 +45,7 @@ export async function generateRandomFeed(userId: string, count: number = 10) {
   ]);
 
   const context = {
-    userInterests: userInterests.map(i => ({ topic: i.topic, weight: i.weight })),
+    userInterests: userInterests.map(i => ({ topic: i.topic, weight: i.weight, lastHit: i.lastHit || undefined })),
     recentHistorySummaries: [], 
     sessionAvgReadTime: 180 
   };

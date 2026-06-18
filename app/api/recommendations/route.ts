@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 import { generateRandomFeed } from '@/lib/feed/generator';
+import { getRelatedArticles } from '@/lib/wikipedia/api';
 
 const recommendSchema = z.object({
   title: z.string().optional(),

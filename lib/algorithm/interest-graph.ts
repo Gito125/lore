@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db/prisma';
+import { newId } from '@/lib/id';
 
 export const WEIGHT_CAP = 1.0;
 export const FOLLOW_FLOOR = 0.6;
@@ -12,48 +13,84 @@ export const ENGAGEMENT_DELTAS: Record<string, number> = {
   'scroll_complete': 0.10,
 };
 
+function normalizeTopic(topic: string): string {
+  const t = topic.trim();
+  const lower = t.toLowerCase();
+  
+  if (lower === 'neural networks' || lower === 'deep learning' || lower === 'transformers' || lower === 'machine learning') {
+    return 'Artificial Intelligence';
+  }
+  
+  // Basic title casing
+  return t.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
+}
+
 /**
  * Updates a user's interest graph based on an engagement event.
  */
-export async function updateTopicWeights(userId: string, topics: string[], eventType: string) {
-  const delta = ENGAGEMENT_DELTAS[eventType];
-  if (!delta) return;
+export async function updateTopicWeights(
+  userId: string, 
+  topics: string[], 
+  eventType: string,
+  metadata?: { read_depth?: number, time_spent?: number }
+) {
+  const baseDelta = ENGAGEMENT_DELTAS[eventType];
+  if (!baseDelta) return;
 
-  for (const topic of topics) {
-    const existing = await prisma.interestGraph.findUnique({
-      where: {
-        userId_topic: { userId, topic }
-      }
-    });
+  let completionFactor = 1.0;
+  let timeFactor = 1.0;
 
+  if (eventType === 'scroll_complete' || eventType === 'open') {
+    if (metadata?.read_depth !== undefined) {
+      completionFactor = Math.max(0.1, metadata.read_depth);
+    }
+    if (metadata?.time_spent !== undefined) {
+      // Scale: 5 minutes (300s) = 1.0
+      timeFactor = Math.max(0.01, Math.min(1.0, metadata.time_spent / 300));
+    }
+  }
+
+  const delta = baseDelta * completionFactor * timeFactor;
+  if (delta === 0) return;
+
+  const normalizedTopics = Array.from(new Set(topics.map(normalizeTopic)));
+  const now = new Date();
+
+  const existingRecords = await prisma.interestGraph.findMany({
+    where: {
+      userId,
+      topic: { in: normalizedTopics }
+    }
+  });
+
+  const existingMap = new Map(existingRecords.map(r => [r.topic, r]));
+
+  const operations = normalizedTopics.map(topic => {
+    const existing = existingMap.get(topic);
     if (existing) {
       let newWeight = existing.weight + delta;
-      
-      // Ensure it doesn't go below 0 or above 1.0
       newWeight = Math.max(0, Math.min(WEIGHT_CAP, newWeight));
-
-      await prisma.interestGraph.update({
+      return prisma.interestGraph.update({
         where: { id: existing.id },
-        data: {
-          weight: newWeight,
-          lastHit: new Date()
-        }
+        data: { weight: newWeight, lastHit: now }
       });
     } else if (delta > 0) {
-      // Only create if it's a positive engagement
-      // Wait, we need an ID for new entries. We should import newId from lib/id.ts
-      const { newId } = await import('@/lib/id');
-      
-      await prisma.interestGraph.create({
+      return prisma.interestGraph.create({
         data: {
           id: newId(),
           userId,
           topic,
           weight: Math.min(WEIGHT_CAP, delta),
-          lastHit: new Date()
+          lastHit: now
         }
       });
     }
+    return null;
+  }).filter(op => op !== null);
+
+  if (operations.length > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await prisma.$transaction(operations as any);
   }
 }
 

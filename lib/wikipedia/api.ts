@@ -22,6 +22,13 @@ export interface WikipediaArticle {
   categories?: string[];
   wordCount?: number;
   html?: string;
+  
+  // Quality signals
+  featured?: boolean;
+  goodArticle?: boolean;
+  citations?: number;
+  references?: number;
+  sectionCount?: number;
 }
 
 const MAX_RETRIES = 3;

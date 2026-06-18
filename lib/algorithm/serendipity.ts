@@ -1,6 +1,7 @@
 export interface TopicWeight {
   topic: string;
   weight: number;
+  lastHit?: Date;
 }
 
 /**

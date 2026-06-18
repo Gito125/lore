@@ -81,7 +81,7 @@ export async function POST(request: Request) {
 
     // 3. Update Interest Graph
     if (topics && topics.length > 0) {
-      await updateTopicWeights(userId, topics, event_type);
+      await updateTopicWeights(userId, topics, event_type, metadata);
     }
 
     return Response.json({ success: true });
