@@ -10,6 +10,11 @@ export interface WikipediaArticle {
     width: number;
     height: number;
   };
+  originalimage?: {
+    source: string;
+    width: number;
+    height: number;
+  };
   content_urls: {
     desktop: { page: string; revisions: string; edit: string; talk: string };
     mobile: { page: string; revisions: string; edit: string; talk: string };
@@ -95,6 +100,7 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
       extract: data.extract,
       extract_html: data.extract_html,
       thumbnail: data.thumbnail,
+      originalimage: data.originalimage,
       content_urls: data.content_urls,
     };
 

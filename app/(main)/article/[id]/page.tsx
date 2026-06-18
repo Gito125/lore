@@ -3,6 +3,7 @@ import { parseWikipediaContent } from '@/lib/wikipedia/parser';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
+import { WikipediaContent } from '@/components/article/WikipediaContent';
 
 export default async function ArticlePage({
   params,
@@ -20,8 +21,11 @@ export default async function ArticlePage({
     if (data) {
       articleTitle = data.title;
       htmlContent = data.html ? parseWikipediaContent(data.html) : data.extract_html;
-      if (data.thumbnail) {
-        thumbnailUrl = data.thumbnail.source;
+      if (data.originalimage) {
+        thumbnailUrl = data.originalimage.source;
+      } else if (data.thumbnail) {
+        // Fallback to requesting a high-res thumbnail
+        thumbnailUrl = data.thumbnail.source.replace(/\/\d+px-/, '/1200px-');
       }
     }
   }
@@ -51,10 +55,7 @@ export default async function ArticlePage({
           </div>
         )}
         
-        <div 
-          className="text-(--text-secondary) leading-relaxed wikipedia-content"
-          dangerouslySetInnerHTML={{ __html: htmlContent }} 
-        />
+        <WikipediaContent htmlContent={htmlContent} />
       </article>
     </div>
   );
