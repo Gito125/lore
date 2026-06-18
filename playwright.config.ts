@@ -9,7 +9,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3006',
+    baseURL: 'http://localhost:3005',
     trace: 'on-first-retry',
   },
 
@@ -19,10 +19,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
-    command: 'export $(grep -v \'^#\' .env.local | xargs) && PORT=3006 NEXT_PUBLIC_TEST_MODE=true pnpm exec next dev -p 3006',
-    url: 'http://localhost:3006',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
 });

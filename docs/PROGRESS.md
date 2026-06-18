@@ -149,6 +149,7 @@
 - [ ] **Playwright E2E — Bookmark flow** — Bookmark an article → appears in `/bookmarks` → delete → gone.
 - [ ] **PWA offline validation** — Disconnect network in browser devtools. Confirm last 20 articles + bookmarks load from service worker cache. Confirm no uncaught errors.
 - [ ] **Accessibility audit** — Run axe-core on Feed, Article, Search, Auth pages. Fix all critical and serious violations. Target WCAG 2.1 AA.
+- [ ] **Proper Error Feedback** — All API errors surfaced to the user with clear messaging. For example, if Wikipedia API fails, show: "We're having trouble loading articles right now. Please try again later." These should be user-friendly, not raw error dumps. 
 
 ---
 ## Phase 7 — UI/UX Polish, Performance, motions and transitions.
