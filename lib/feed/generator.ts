@@ -64,7 +64,7 @@ export async function generateRandomFeed(userId: string, count: number = 10) {
     id: article.id,
     title: article.title,
     extract: article.extract,
-    imageUrl: article.thumbnail?.source,
+    imageUrl: article.originalimage?.source || article.thumbnail?.source,
     readTime: article.wordCount ? Math.max(1, Math.ceil(article.wordCount / 250)) : 5,
     category: article.categories?.[0] || 'Uncategorized',
   }));

@@ -14,14 +14,18 @@ interface FeedArticle {
   category: string;
 }
 
-function mapToFeedArticle(article: WikipediaArticle): FeedArticle {
+interface FeedListProps {
+  initialArticles: FeedArticle[];
+}
+
+function mapToFeedArticle(article: Partial<WikipediaArticle> & Partial<FeedArticle>): FeedArticle {
   return {
-    id: article.id,
-    title: article.title,
-    extract: article.extract,
-    imageUrl: article.thumbnail?.source,
-    readTime: article.wordCount ? Math.max(1, Math.ceil(article.wordCount / 250)) : 5,
-    category: article.categories?.[0] || 'Uncategorized',
+    id: article.id || '',
+    title: article.title || '',
+    extract: article.extract || '',
+    imageUrl: article.imageUrl || article.originalimage?.source || article.thumbnail?.source,
+    readTime: article.readTime || (article.wordCount ? Math.max(1, Math.ceil(article.wordCount / 250)) : 5),
+    category: article.category || article.categories?.[0] || 'Uncategorized',
   };
 }
 
