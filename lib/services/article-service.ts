@@ -82,7 +82,7 @@ export async function getArticle(title: string): Promise<Article | null> {
       categories: ['Mock'],
       wordCount: 500,
       html: `<h2>Mock HTML for ${title}</h2><p>This is a mock article for testing purposes.</p>`,
-      thumbnail: { source: 'https://placehold.co/400x300', width: 400, height: 300 }
+      thumbnail: { source: 'https://picsum.photos/400/300', width: 400, height: 300 }
     };
   }
 
@@ -136,7 +136,7 @@ export async function getRecommendations(title: string): Promise<Article[]> {
       extract_html: `<p>Mock related extract for ${title} ${i}</p>`,
       categories: ['Mock'],
       wordCount: 300,
-      thumbnail: { source: 'https://placehold.co/400x300', width: 400, height: 300 }
+      thumbnail: { source: 'https://picsum.photos/400/300', width: 400, height: 300 }
     }));
   }
 

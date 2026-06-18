@@ -7,7 +7,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | Phase 6 — Hardening & Test Coverage |
+| **Phase** | Phase 7 — UI/UX Polish, Performance, motions and transitions |
 | **Status** | 🚧 In Progress |
 | **Stack Locked** | Next.js 16 · Local PostgreSQL · Prisma · Auth.js v5 · UUID v7 · Upstash Redis |
 | **Design Locked** | Dark Editorial · EB Garamond + Inter + JetBrains Mono · Dark Navy & Gold |
@@ -142,14 +142,14 @@
 - [x] **Error boundaries** — Add React error boundaries to `Feed`, `ArticleDetail`, `Search`, and `Profile`. Wikipedia API going down must show a graceful fallback, not a crash.
 - [x] **Loading & skeleton states** — All async data fetches (feed, article, search, stats) must have skeleton screens. No layout shift on load. Audit against existing `FeedSkeleton` pattern.
 - [x] **Wikipedia API resilience** — Implement exponential backoff + retry (max 3 attempts) on the Wikipedia wrapper (`lib/wikipedia/api.ts`). Handle 429, 503, and network timeouts explicitly.
-- [ ] **Playwright E2E — Auth flows** — Sign up, log in, log out. Google OAuth flow with mock provider in test env.
-- [ ] **Playwright E2E — Feed flow** — Load feed, scroll to trigger pagination, verify real articles render with images.
-- [ ] **Playwright E2E — Article flow** — Click ArticleCard → Article Detail renders → back navigation works.
-- [ ] **Playwright E2E — Search flow** — Type query → debounce fires → real results appear → click result → Article Detail renders.
-- [ ] **Playwright E2E — Bookmark flow** — Bookmark an article → appears in `/bookmarks` → delete → gone.
-- [ ] **PWA offline validation** — Disconnect network in browser devtools. Confirm last 20 articles + bookmarks load from service worker cache. Confirm no uncaught errors.
-- [ ] **Accessibility audit** — Run axe-core on Feed, Article, Search, Auth pages. Fix all critical and serious violations. Target WCAG 2.1 AA.
-- [ ] **Proper Error Feedback** — All API errors surfaced to the user with clear messaging. For example, if Wikipedia API fails, show: "We're having trouble loading articles right now. Please try again later." These should be user-friendly, not raw error dumps. 
+- [x] **Playwright E2E — Auth flows** — Sign up, log in, log out. Google OAuth flow with mock provider in test env.
+- [x] **Playwright E2E — Feed flow** — Load feed, scroll to trigger pagination, verify real articles render with images.
+- [x] **Playwright E2E — Article flow** — Click ArticleCard → Article Detail renders → back navigation works.
+- [x] **Playwright E2E — Search flow** — Type query → debounce fires → real results appear → click result → Article Detail renders.
+- [x] **Playwright E2E — Bookmark flow** — Bookmark an article → appears in `/bookmarks` → delete → gone.
+- [x] **PWA offline validation** — Disconnect network in browser devtools. Confirm last 20 articles + bookmarks load from service worker cache. Confirm no uncaught errors.
+- [x] **Accessibility audit** — Run axe-core on Feed, Article, Search, Auth pages. Fix all critical and serious violations. Target WCAG 2.1 AA.
+- [x] **Proper Error Feedback** — All API errors surfaced to the user with clear messaging. For example, if Wikipedia API fails, show: "We're having trouble loading articles right now. Please try again later." These should be user-friendly, not raw error dumps. 
 
 ---
 ## Phase 7 — UI/UX Polish, Performance, motions and transitions.
