@@ -1,7 +1,21 @@
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 import { generateRandomFeed } from '@/lib/feed/generator';
-import { getRelatedArticles } from '@/lib/wikipedia/api';
+import { getRecommendations } from '@/lib/services/article-service';
+import arcjet, { tokenBucket } from '@arcjet/next';
+
+const aj = arcjet({
+  key: process.env.ARCJET_KEY || 'ajkey_test_123', // required
+  characteristics: ['ip.src'],
+  rules: [
+    tokenBucket({
+      mode: 'LIVE',
+      refillRate: 5,
+      interval: 10,
+      capacity: 10,
+    }),
+  ],
+});
 
 const recommendSchema = z.object({
   title: z.string().optional(),
@@ -10,6 +24,11 @@ const recommendSchema = z.object({
 
 export async function GET(request: Request) {
   try {
+    const decision = await aj.protect(request, { requested: 1 });
+    if (decision.isDenied()) {
+      return Response.json({ error: 'Too Many Requests' }, { status: 429 });
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
@@ -30,7 +49,7 @@ export async function GET(request: Request) {
 
     // If title is provided, fetch related articles (for sidebar)
     if (title) {
-      const related = await getRelatedArticles(title);
+      const related = await getRecommendations(title);
       return Response.json({ recommendations: related.slice(0, 5) });
     }
 
@@ -43,3 +62,4 @@ export async function GET(request: Request) {
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+

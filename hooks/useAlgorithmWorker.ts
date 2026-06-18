@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import type { WikipediaArticle } from '@/lib/wikipedia/api';
+import type { Article as WikipediaArticle } from '@/lib/services/article-service';
 import type { ScoringContext, ScoredArticle } from '@/lib/algorithm/scorer';
 import type { AlgorithmWorkerRequest, AlgorithmWorkerResponse } from '@/workers/algorithm.worker';
 

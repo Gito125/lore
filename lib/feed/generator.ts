@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db/prisma';
-import { getRelatedArticles, type WikipediaArticle } from '@/lib/wikipedia/api';
+import { getRecommendations, type Article as WikipediaArticle } from '@/lib/services/article-service';
 import { rankArticles } from '@/lib/algorithm/scorer';
 
 export async function generateRandomFeed(userId: string, count: number = 10) {
@@ -19,7 +19,7 @@ export async function generateRandomFeed(userId: string, count: number = 10) {
   // Fetch articles for these topics sequentially to avoid connection overload
   const relatedArrays = [];
   for (const topic of selectedTopics) {
-    const articles = await getRelatedArticles(topic);
+    const articles = await getRecommendations(topic);
     relatedArrays.push(articles);
   }
   const related = relatedArrays.flat();
@@ -69,3 +69,4 @@ export async function generateRandomFeed(userId: string, count: number = 10) {
     category: article.categories?.[0] || 'Uncategorized',
   }));
 }
+

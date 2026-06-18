@@ -139,8 +139,8 @@
 
 > **Completion gate:** Every route has an error state. Every async fetch has a loading state. CI passes before any merge. Playwright covers the full user journey end-to-end.
 
-- [ ] **Error boundaries** — Add React error boundaries to `Feed`, `ArticleDetail`, `Search`, and `Profile`. Wikipedia API going down must show a graceful fallback, not a crash.
-- [ ] **Loading & skeleton states** — All async data fetches (feed, article, search, stats) must have skeleton screens. No layout shift on load. Audit against existing `FeedSkeleton` pattern.
+- [x] **Error boundaries** — Add React error boundaries to `Feed`, `ArticleDetail`, `Search`, and `Profile`. Wikipedia API going down must show a graceful fallback, not a crash.
+- [x] **Loading & skeleton states** — All async data fetches (feed, article, search, stats) must have skeleton screens. No layout shift on load. Audit against existing `FeedSkeleton` pattern.
 - [x] **Wikipedia API resilience** — Implement exponential backoff + retry (max 3 attempts) on the Wikipedia wrapper (`lib/wikipedia/api.ts`). Handle 429, 503, and network timeouts explicitly.
 - [ ] **Playwright E2E — Auth flows** — Sign up, log in, log out. Google OAuth flow with mock provider in test env.
 - [ ] **Playwright E2E — Feed flow** — Load feed, scroll to trigger pagination, verify real articles render with images.

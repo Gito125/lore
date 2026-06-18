@@ -1,9 +1,35 @@
-import { getWikipediaArticleFull } from '@/lib/wikipedia/api';
+import { getFullArticle } from '@/lib/services/article-service';
 import { parseWikipediaContent } from '@/lib/wikipedia/parser';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { WikipediaContent } from '@/components/article/WikipediaContent';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const data = await getFullArticle(decodeURIComponent(id));
+  
+  if (!data) {
+    return { title: 'Article Not Found | Lore' };
+  }
+
+  return {
+    title: `${data.title} | Lore`,
+    description: data.extract?.substring(0, 160) || 'Read this article on Lore.',
+    openGraph: {
+      title: data.title,
+      description: data.extract?.substring(0, 160),
+      images: data.thumbnail ? [data.thumbnail.source] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.extract?.substring(0, 160),
+      images: data.thumbnail ? [data.thumbnail.source] : [],
+    }
+  };
+}
 
 export default async function ArticlePage({
   params,
@@ -12,22 +38,31 @@ export default async function ArticlePage({
 }) {
   const { id } = await params;
   
-  let articleTitle = 'Article Details';
-  let htmlContent = '<p>This is a placeholder for article ' + id + '</p>';
+  const data = await getFullArticle(decodeURIComponent(id));
+  
+  if (!data) {
+    return (
+      <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 pb-20">
+        <Link href="/feed" className="flex items-center gap-2 text-sm font-mono text-(--text-muted) hover:text-(--text-primary) transition-colors w-fit">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Feed
+        </Link>
+        <div className="text-center py-20 text-(--text-muted)">
+          Article not found.
+        </div>
+      </div>
+    );
+  }
+
+  const articleTitle = data.title;
+  const htmlContent = data.html ? parseWikipediaContent(data.html) : data.extract_html;
   let thumbnailUrl: string | undefined;
   
-  if (id.length > 3) {
-    const data = await getWikipediaArticleFull(decodeURIComponent(id));
-    if (data) {
-      articleTitle = data.title;
-      htmlContent = data.html ? parseWikipediaContent(data.html) : data.extract_html;
-      if (data.originalimage) {
-        thumbnailUrl = data.originalimage.source;
-      } else if (data.thumbnail) {
-        // Fallback to requesting a high-res thumbnail
-        thumbnailUrl = data.thumbnail.source.replace(/\/\d+px-/, '/1200px-');
-      }
-    }
+  if (data.originalimage) {
+    thumbnailUrl = data.originalimage.source;
+  } else if (data.thumbnail) {
+    // Fallback to requesting a high-res thumbnail
+    thumbnailUrl = data.thumbnail.source.replace(/\/\d+px-/, '/1200px-');
   }
 
   return (
@@ -60,3 +95,4 @@ export default async function ArticlePage({
     </div>
   );
 }
+

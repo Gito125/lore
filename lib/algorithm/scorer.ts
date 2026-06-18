@@ -1,4 +1,4 @@
-import type { WikipediaArticle } from '../wikipedia/api';
+import type { Article as WikipediaArticle } from '../services/article-service';
 import { calculateSemanticSimilarity } from './semantic';
 import { calculateSerendipityScore, type TopicWeight } from './serendipity';
 

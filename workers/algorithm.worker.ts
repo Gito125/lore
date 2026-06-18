@@ -1,4 +1,4 @@
-import type { WikipediaArticle } from '../lib/wikipedia/api';
+import type { Article as WikipediaArticle } from '../lib/services/article-service';
 import { rankArticles, type ScoringContext, type ScoredArticle } from '../lib/algorithm/scorer';
 
 export interface AlgorithmWorkerRequest {

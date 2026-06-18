@@ -1,35 +1,39 @@
+import { z } from 'zod';
+
 const WIKI_API_BASE = 'https://en.wikipedia.org/api/rest_v1/page';
 
-export interface WikipediaArticle {
-  id: string;
-  title: string;
-  extract: string;
-  extract_html: string;
-  thumbnail?: {
-    source: string;
-    width: number;
-    height: number;
-  };
-  originalimage?: {
-    source: string;
-    width: number;
-    height: number;
-  };
-  content_urls: {
-    desktop: { page: string; revisions: string; edit: string; talk: string };
-    mobile: { page: string; revisions: string; edit: string; talk: string };
-  };
-  categories?: string[];
-  wordCount?: number;
-  html?: string;
+export const WikipediaArticleSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  extract: z.string().default(''),
+  extract_html: z.string().default(''),
+  thumbnail: z.object({
+    source: z.string(),
+    width: z.number(),
+    height: z.number(),
+  }).optional(),
+  originalimage: z.object({
+    source: z.string(),
+    width: z.number(),
+    height: z.number(),
+  }).optional(),
+  content_urls: z.object({
+    desktop: z.object({ page: z.string(), revisions: z.string(), edit: z.string(), talk: z.string() }).optional(),
+    mobile: z.object({ page: z.string(), revisions: z.string(), edit: z.string(), talk: z.string() }).optional(),
+  }).optional(),
+  categories: z.array(z.string()).optional(),
+  wordCount: z.number().optional(),
+  html: z.string().optional(),
   
   // Quality signals
-  featured?: boolean;
-  goodArticle?: boolean;
-  citations?: number;
-  references?: number;
-  sectionCount?: number;
-}
+  featured: z.boolean().optional(),
+  goodArticle: z.boolean().optional(),
+  citations: z.number().optional(),
+  references: z.number().optional(),
+  sectionCount: z.number().optional(),
+});
+
+export type Article = z.infer<typeof WikipediaArticleSchema>;
 
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 500;
@@ -68,14 +72,13 @@ async function fetchWithRetry(url: string, options: RequestInit = {}): Promise<R
   throw lastError;
 }
 
-export async function getWikipediaArticleSummary(title: string): Promise<WikipediaArticle | null> {
+export async function getArticle(title: string): Promise<Article | null> {
   if (process.env.USE_MOCK_WIKI === 'true') {
     return {
       id: title,
       title,
       extract: `Mock extract for ${title}`,
       extract_html: `<p>Mock extract for ${title}</p>`,
-      content_urls: { desktop: { page: '#', revisions: '#', edit: '#', talk: '#' }, mobile: { page: '#', revisions: '#', edit: '#', talk: '#' } },
       categories: ['Mock'],
       wordCount: 500,
       html: `<h2>Mock HTML for ${title}</h2><p>This is a mock article for testing purposes.</p>`,
@@ -85,12 +88,13 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
 
   try {
     const encodedTitle = encodeURIComponent(title);
+    
+    // Using Next.js fetch caching directly
     const res = await fetchWithRetry(`${WIKI_API_BASE}/summary/${encodedTitle}`, {
       headers: {
         'User-Agent': 'LoreApp/1.0 (Contact: admin@example.com)'
       },
-      // Using Next.js fetch caching directly
-      // next: { revalidate: 3600 } 
+      next: { revalidate: 3600 } 
     });
 
     if (!res.ok) {
@@ -101,7 +105,7 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
     const data = await res.json();
     
     // Transform and structure the response
-    const article: WikipediaArticle = {
+    const articleParsed = WikipediaArticleSchema.safeParse({
       id: data.title,
       title: data.title,
       extract: data.extract,
@@ -109,23 +113,27 @@ export async function getWikipediaArticleSummary(title: string): Promise<Wikiped
       thumbnail: data.thumbnail,
       originalimage: data.originalimage,
       content_urls: data.content_urls,
-    };
+    });
 
-    return article;
+    if (!articleParsed.success) {
+      console.error('Validation failed for article summary:', articleParsed.error);
+      return null;
+    }
+
+    return articleParsed.data;
   } catch (error) {
     console.error(`Error fetching Wikipedia article ${title}:`, error);
     return null;
   }
 }
 
-export async function getRelatedArticles(title: string): Promise<WikipediaArticle[]> {
+export async function getRecommendations(title: string): Promise<Article[]> {
   if (process.env.USE_MOCK_WIKI === 'true') {
     return Array.from({ length: 15 }).map((_, i) => ({
       id: `mock-${title}-${i}`,
       title: `${title} Mock Related ${i}`,
       extract: `Mock related extract for ${title} ${i}`,
       extract_html: `<p>Mock related extract for ${title} ${i}</p>`,
-      content_urls: { desktop: { page: '#', revisions: '#', edit: '#', talk: '#' }, mobile: { page: '#', revisions: '#', edit: '#', talk: '#' } },
       categories: ['Mock'],
       wordCount: 300,
       thumbnail: { source: 'https://placehold.co/400x300', width: 400, height: 300 }
@@ -134,7 +142,6 @@ export async function getRelatedArticles(title: string): Promise<WikipediaArticl
 
   try {
     const encodedTitle = encodeURIComponent(title);
-    // Use the Action API to search for related articles since the REST API /related endpoint is decommissioned
     const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodedTitle}&gsrlimit=15&prop=extracts|pageimages|categories&exchars=300&exintro=1&piprop=thumbnail&pithumbsize=400&format=json`;
     
     const res = await fetchWithRetry(url, {
@@ -142,7 +149,7 @@ export async function getRelatedArticles(title: string): Promise<WikipediaArticl
         'User-Agent': 'LoreApp/1.0 (Contact: admin@example.com)'
       },
       next: { revalidate: 3600 }
-    } as RequestInit);
+    });
 
     if (!res.ok) {
       return [];
@@ -153,23 +160,15 @@ export async function getRelatedArticles(title: string): Promise<WikipediaArticl
       return [];
     }
 
-    interface ActionApiPage {
-      pageid: number;
-      title: string;
-      extract?: string;
-      thumbnail?: { source: string; width: number; height: number };
-      categories?: { title: string }[];
-    }
-
-    const pages = Object.values(data.query.pages) as ActionApiPage[];
+    const pages = Object.values(data.query.pages) as any[];
     
-    return pages.map((page) => {
+    const articles = pages.map((page) => {
       const pageTitleEncoded = encodeURIComponent(page.title);
       const extractHtml = page.extract || '';
-      const extractText = extractHtml.replace(/<[^>]*>?/gm, ''); // simple html strip
+      const extractText = extractHtml.replace(/<[^>]*>?/gm, ''); 
       
       const categories = page.categories 
-        ? page.categories.map((c) => c.title.replace(/^Category:/, ''))
+        ? page.categories.map((c: any) => c.title.replace(/^Category:/, ''))
         : [];
 
       return {
@@ -195,19 +194,27 @@ export async function getRelatedArticles(title: string): Promise<WikipediaArticl
         },
       };
     });
+
+    const parsedArticles = z.array(WikipediaArticleSchema).safeParse(articles);
+    if (!parsedArticles.success) {
+      console.error('Validation failed for recommendations:', parsedArticles.error);
+      return [];
+    }
+    return parsedArticles.data;
+
   } catch (error) {
     console.error(`Error fetching related articles for ${title}:`, error);
     return [];
   }
 }
 
-export async function getWikipediaArticleFull(title: string): Promise<WikipediaArticle | null> {
+export async function getFullArticle(title: string): Promise<Article | null> {
   if (process.env.USE_MOCK_WIKI === 'true') {
-    return getWikipediaArticleSummary(title);
+    return getArticle(title);
   }
 
   try {
-    const summary = await getWikipediaArticleSummary(title);
+    const summary = await getArticle(title);
     if (!summary) return null;
 
     const encodedTitle = encodeURIComponent(title);
@@ -219,7 +226,7 @@ export async function getWikipediaArticleFull(title: string): Promise<WikipediaA
     });
 
     if (!res.ok) {
-      return summary; // Return just the summary if full HTML fetch fails
+      return summary;
     }
 
     const data = await res.json();
@@ -230,6 +237,25 @@ export async function getWikipediaArticleFull(title: string): Promise<WikipediaA
     return summary;
   } catch (error) {
     console.error(`Error fetching full Wikipedia article ${title}:`, error);
-    return null; // or just return the summary if we have it? Wait, we wouldn't have it here if we await it at the top, so we'd return null if it fails in try block.
+    return null; 
+  }
+}
+
+export async function searchArticles(query: string, limit: number = 10): Promise<any[]> {
+  try {
+    const url = `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${encodeURIComponent(query.trim())}&limit=${limit}`;
+    const res = await fetchWithRetry(url, {
+      headers: {
+        'User-Agent': 'LoreApp/1.0 (Contact: admin@example.com)'
+      },
+      next: { revalidate: 3600 }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    // Validate or just return
+    return data?.pages || [];
+  } catch (error) {
+    console.error('Search error:', error);
+    return [];
   }
 }

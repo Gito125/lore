@@ -1,4 +1,19 @@
 import { z } from 'zod';
+import { searchArticles } from '@/lib/services/article-service';
+import arcjet, { tokenBucket } from '@arcjet/next';
+
+const aj = arcjet({
+  key: process.env.ARCJET_KEY || 'ajkey_test_123',
+  characteristics: ['ip.src'],
+  rules: [
+    tokenBucket({
+      mode: 'LIVE',
+      refillRate: 10,
+      interval: 10,
+      capacity: 20,
+    }),
+  ],
+});
 
 const searchSchema = z.object({
   q: z.string().min(1),
@@ -7,6 +22,11 @@ const searchSchema = z.object({
 
 export async function GET(request: Request) {
   try {
+    const decision = await aj.protect(request, { requested: 1 });
+    if (decision.isDenied()) {
+      return Response.json({ error: 'Too Many Requests' }, { status: 429 });
+    }
+
     const { searchParams } = new URL(request.url);
     const parsed = searchSchema.safeParse({
       q: searchParams.get('q') || undefined,
@@ -19,41 +39,11 @@ export async function GET(request: Request) {
 
     const { q, limit } = parsed.data;
     
-    // Wikipedia REST API for search
-    const url = `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${encodeURIComponent(q)}&limit=${limit}`;
-    
-    // Retry logic
-    let res: Response | null = null;
-    let lastError: Error | unknown;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        res = await fetch(url, {
-          headers: {
-            'User-Agent': 'LoreApp/1.0 (Contact: admin@example.com)'
-          },
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        if (res.status !== 429 && res.status < 500) {
-          break;
-        }
-      } catch (error) {
-        lastError = error;
-      }
-      await new Promise(resolve => setTimeout(resolve, 500 * Math.pow(2, attempt)));
-    }
-
-    if (!res || !res.ok) {
-      throw lastError || new Error(`Wikipedia search failed with status ${res?.status}`);
-    }
-
-    const data = await res.json();
-    return Response.json(data);
+    const data = await searchArticles(q, limit);
+    return Response.json({ pages: data });
   } catch (error) {
     console.error('Search error:', error);
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+

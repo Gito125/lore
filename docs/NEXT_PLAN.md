@@ -70,3 +70,28 @@ The Redis and Rate Limiting features using Upstash were removed from the initial
 5. **Update Documentation:**
    - Ensure the `.env.example` or `docs/ENV.md` reflects the required Upstash keys.
    - Run a rate limit audit (as noted in Phase 8 of PROGRESS.md) to ensure endpoints are adequately protected.
+
+---
+
+## Sentry Error Monitoring Integration
+
+The Sentry integration for monitoring frontend errors, API failures, and performance tracking was deferred. It should be implemented as part of the production readiness phase.
+
+**Implementation Plan:**
+
+1. **Install Dependencies:**
+   ```bash
+   pnpm add @sentry/nextjs
+   ```
+
+2. **Run Sentry Wizard or Create Configurations:**
+   - Either run `npx @sentry/wizard@latest -i nextjs` or manually create:
+     - `sentry.client.config.ts`
+     - `sentry.server.config.ts`
+     - `sentry.edge.config.ts`
+
+3. **Update Next.js Configuration:**
+   - Wrap `next.config.ts` with `withSentryConfig`.
+
+4. **Environment Variables:**
+   - Ensure a valid `NEXT_PUBLIC_SENTRY_DSN` is added to production environment variables.

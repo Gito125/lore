@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ArticleCard } from './ArticleCard';
 import { FeedSkeleton } from './FeedSkeleton';
-import type { WikipediaArticle } from '@/lib/wikipedia/api';
+import type { Article as WikipediaArticle } from '@/lib/services/article-service';
 
 interface FeedArticle {
   id: string;
