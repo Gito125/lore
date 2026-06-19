@@ -8,10 +8,33 @@ import { newId } from '@/lib/id';
 const baseAdapter = PrismaAdapter(prisma);
 const customAdapter = {
   ...baseAdapter,
-  createUser: (data: Parameters<NonNullable<typeof baseAdapter.createUser>>[0]) => baseAdapter.createUser!({ ...data, id: newId() }),
-  linkAccount: (data: Parameters<NonNullable<typeof baseAdapter.linkAccount>>[0]) => baseAdapter.linkAccount!({ ...data, id: newId() }),
-  // @ts-expect-error Auth.js types don't include custom ID but our DB requires it
-  createSession: (data: Parameters<NonNullable<typeof baseAdapter.createSession>>[0]) => baseAdapter.createSession!({ ...data, id: newId() }),
+  createUser: async (data: Parameters<NonNullable<typeof baseAdapter.createUser>>[0]) => {
+    const { id, ...rest } = data as any;
+    return await prisma.user.create({
+      data: {
+        ...rest,
+        id: newId(),
+      },
+    }) as any;
+  },
+  linkAccount: async (data: Parameters<NonNullable<typeof baseAdapter.linkAccount>>[0]) => {
+    const { id, ...rest } = data as any;
+    return await prisma.account.create({
+      data: {
+        ...rest,
+        id: newId(),
+      },
+    }) as any;
+  },
+  createSession: async (data: Parameters<NonNullable<typeof baseAdapter.createSession>>[0]) => {
+    const { id, ...rest } = data as any;
+    return await prisma.session.create({
+      data: {
+        ...rest,
+        id: newId(),
+      },
+    }) as any;
+  },
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
