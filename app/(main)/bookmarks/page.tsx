@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
+import type { Bookmark } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { BookmarkButton } from '@/components/feed/BookmarkButton';
@@ -33,7 +34,7 @@ export default async function BookmarksPage() {
             <p className="text-(--text-muted) font-mono text-sm">No saved articles yet.</p>
           </div>
         ) : (
-          bookmarks.map(bookmark => (
+          bookmarks.map((bookmark: Bookmark) => (
             <div key={bookmark.id} className="p-6 bg-[rgba(26,26,46,0.5)] backdrop-blur-xl border border-[rgba(255,255,255,0.06)] rounded-2xl hover:border-[rgba(255,255,255,0.15)] transition-all duration-300 flex justify-between items-start group">
               <div className="flex flex-col pr-6">
                 <Link href={`/article/${bookmark.articleId}`} className="text-xl md:text-2xl font-serif text-(--text-primary) leading-snug tracking-tight group-hover:text-(--accent) transition-colors duration-300">
