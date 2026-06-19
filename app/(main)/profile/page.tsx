@@ -3,11 +3,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db/prisma';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
-import dynamic from 'next/dynamic';
-const KnowledgeGraph = dynamic(
-  () => import('@/components/profile/KnowledgeGraph').then(mod => mod.KnowledgeGraph),
-  { ssr: false, loading: () => <div className="w-full h-96 animate-pulse bg-[rgba(255,255,255,0.02)] rounded-xl" /> }
-);
+import { KnowledgeGraphDynamic } from '@/components/profile/KnowledgeGraphDynamic';
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -70,7 +66,7 @@ export default async function ProfilePage() {
           <section>
             <h2 className="text-sm font-mono text-(--text-muted) tracking-widest uppercase mb-4">Knowledge Graph</h2>
             <div className="bg-[rgba(26,26,46,0.5)] backdrop-blur-xl border border-[rgba(255,255,255,0.06)] rounded-2xl p-6">
-               <KnowledgeGraph topics={topTopics} />
+               <KnowledgeGraphDynamic topics={topTopics} />
             </div>
           </section>
         )}

@@ -2,7 +2,7 @@ import { getFullArticle } from '@/lib/services/article-service';
 import { parseWikipediaContent } from '@/lib/wikipedia/parser';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import Image from 'next/image';
+import { ArticleImage } from '@/components/article/ArticleImage';
 import { WikipediaContent } from '@/components/article/WikipediaContent';
 import type { Metadata } from 'next';
 
@@ -78,16 +78,7 @@ export default async function ArticlePage({
         </h1>
         
         {thumbnailUrl && (
-          <div className="relative w-full h-64 md:h-96 mb-8 rounded-2xl overflow-hidden border border-(--border)">
-            <Image 
-              src={thumbnailUrl} 
-              alt={articleTitle} 
-              fill 
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-              priority
-            />
-          </div>
+          <ArticleImage src={thumbnailUrl} alt={articleTitle} />
         )}
         
         <WikipediaContent htmlContent={htmlContent} />
