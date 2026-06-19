@@ -18,7 +18,7 @@ export default function ArticleError({
     <div className="flex flex-col items-center justify-center py-20 text-center gap-6">
       <div className="text-(--text-muted) max-w-md">
         <h2 className="text-xl font-serif text-(--text-primary) mb-2">Failed to load article</h2>
-        <p className="mb-6">We couldn't retrieve this article. It may have been deleted or there's a network issue.</p>
+        <p className="mb-6">We couldn&apos;t retrieve this article. It may have been deleted or there&apos;s a network issue.</p>
         <div className="flex gap-4 justify-center">
           <button
             onClick={() => reset()}

@@ -17,7 +17,7 @@ export default function FeedError({
     <div className="flex flex-col items-center justify-center py-20 text-center gap-6">
       <div className="text-(--text-muted) max-w-md">
         <h2 className="text-xl font-serif text-(--text-primary) mb-2">Something went wrong</h2>
-        <p className="mb-6">We couldn't load your feed. This might be due to a network issue or rate limit.</p>
+        <p className="mb-6">We couldn&apos;t load your feed. This might be due to a network issue or rate limit.</p>
         <button
           onClick={() => reset()}
           className="px-6 py-2 rounded-lg bg-[rgba(255,255,255,0.06)] hover:bg-[rgba(255,255,255,0.1)] transition-colors text-(--text-primary) border border-(--border)"

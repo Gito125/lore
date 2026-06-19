@@ -32,4 +32,37 @@
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Image dimming for optimal dark mode contrast */
+img {
+  filter: brightness(0.9) contrast(1.05);
+  transition: filter 0.3s ease;
+}
+
+img:hover {
+  filter: brightness(1) contrast(1);
+}
+
+::selection {
+  background-color: rgba(108, 99, 255, 0.3);
+  color: var(--text-primary);
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }

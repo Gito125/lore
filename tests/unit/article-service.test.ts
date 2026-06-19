@@ -6,7 +6,7 @@ global.fetch = vi.fn();
 
 describe('article-service', () => {
   it('fetches an article summary successfully', async () => {
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
       ok: true,
       status: 200,
       json: async () => ({
@@ -24,7 +24,7 @@ describe('article-service', () => {
   });
 
   it('fetches recommendations successfully', async () => {
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
       ok: true,
       status: 200,
       json: async () => ({

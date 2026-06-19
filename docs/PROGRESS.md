@@ -7,7 +7,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | Phase 7 — UI/UX Polish, Performance, motions and transitions |
+| **Phase** | Phase 8 — Production Infrastructure & Public Launch |
 | **Status** | 🚧 In Progress |
 | **Stack Locked** | Next.js 16 · Local PostgreSQL · Prisma · Auth.js v5 · UUID v7 · Upstash Redis |
 | **Design Locked** | Dark Editorial · EB Garamond + Inter + JetBrains Mono · Dark Navy & Gold |
@@ -154,13 +154,13 @@
 ---
 ## Phase 7 — UI/UX Polish, Performance, motions and transitions.
 **Goal:** Refine the user experience with intentional motion, optimize performance for real-world conditions, and ensure the design system shines in every interaction.
-- [ ] **Amazing GSAP onboarding sequence** — Create a cinematic hero reveal on first visit. Animate the logo, headline, and feed cards with a signature sequence that sets the tone for the app.
-- [ ] **Framer Motion audit and addition where needed** — Review every animation and transition in the app. Ensure it follows the Sovereign Archive principles: purposeful, enhances clarity, and delights without distracting. Refine spring configs and easing curves for maximum polish.
-- [ ] **Performance optimization** — Analyze bundle size with Webpack Bundle Analyzer. Implement code-splitting and dynamic imports for heavy components (e.g., Knowledge Graph). Optimize image loading with Next.js `Image` component and proper sizing.
-- [ ] **Design system consistency** — Audit all components against the design tokens. Ensure color, typography, and spacing are consistent across the app. Refine any components that feel off-brand or inconsistent with the Dark Editorial aesthetic.
-- [ ] **Dark mode polish** — Ensure all components look great in dark mode. Pay special attention to contrast ratios, shadow usage, and how images render against the dark background. Adjust design tokens as needed for optimal dark mode experience.
-- [ ] **Micro-interactions** — Add subtle micro-interactions to key UI elements: button presses, card hovers, bookmark toggles. These should be delightful but not overdone, enhancing the tactile feel of the app.
-- [ ] **Page transitions** — Implement smooth page transitions with Framer Motion. For example, when navigating from the feed to an article, have the article card expand into the detail view. When going back, reverse the animation.
+- [x] **Amazing GSAP onboarding sequence** — Create a cinematic hero reveal on first visit. Animate the logo, headline, and feed cards with a signature sequence that sets the tone for the app.
+- [x] **Framer Motion audit and addition where needed** — Review every animation and transition in the app. Ensure it follows the Sovereign Archive principles: purposeful, enhances clarity, and delights without distracting. Refine spring configs and easing curves for maximum polish.
+- [x] **Performance optimization** — Analyze bundle size with Webpack Bundle Analyzer. Implement code-splitting and dynamic imports for heavy components (e.g., Knowledge Graph). Optimize image loading with Next.js `Image` component and proper sizing.
+- [x] **Design system consistency** — Audit all components against the design tokens. Ensure color, typography, and spacing are consistent across the app. Refine any components that feel off-brand or inconsistent with the Dark Editorial aesthetic.
+- [x] **Dark mode polish** — Ensure all components look great in dark mode. Pay special attention to contrast ratios, shadow usage, and how images render against the dark background. Adjust design tokens as needed for optimal dark mode experience.
+- [x] **Micro-interactions** — Add subtle micro-interactions to key UI elements: button presses, card hovers, bookmark toggles. These should be delightful but not overdone, enhancing the tactile feel of the app.
+- [x] **Page transitions** — Implement smooth page transitions with Framer Motion. For example, when navigating from the feed to an article, have the article card expand into the detail view. When going back, reverse the animation.
 
 
 ## Phase 8 — Production Infrastructure & Public Launch
@@ -171,22 +171,22 @@
 ### Infrastructure
 
 - [ ] **Hosted PostgreSQL** — Migrate from local Postgres to Neon (recommended: native Prisma integration, serverless-friendly, free tier). Run `prisma migrate deploy` against production DB. Add `DATABASE_URL` to production env.
-- [ ] **Environment config** — Define `.env.local`, `.env.staging`, `.env.production`. Document all required vars in `docs/ENV.md`. Never commit secrets.
+- [x] **Environment config** — Define `.env.local`, `.env.staging`, `.env.production`. Document all required vars in `docs/ENV.md`. Never commit secrets.
 - [ ] **Vercel deployment** — Connect GitHub repo to Vercel. Configure build settings for Next.js 16 App Router. Set all production env vars in Vercel dashboard.
 - [ ] **Custom domain + SSL** — Point domain to Vercel. Confirm SSL certificate provisioned. Set up `www` redirect.
-- [ ] **CI/CD pipeline** — GitHub Actions workflow: lint → typecheck → unit tests → Playwright E2E → deploy to Vercel on merge to `main`. Block merge if any step fails.
+- [x] **CI/CD pipeline** — GitHub Actions workflow: lint → typecheck → unit tests → Playwright E2E → deploy to Vercel on merge to `main`. Block merge if any step fails.
 
 ### Observability
 
-- [ ] **Error monitoring** — Integrate Sentry (`@sentry/nextjs`). Capture server-side and client-side errors. Set up Slack/email alerts for P0 errors.
-- [ ] **Analytics** — Integrate PostHog (recommended: self-hostable, GDPR-friendly, event-based). Track: article opens, search queries, bookmarks, session length, topic follows.
-- [ ] **Uptime monitoring** — Configure Vercel status checks or Better Uptime on `/api/health` endpoint (create this route: returns 200 + DB ping).
+- [x] **Error monitoring** — Integrate Sentry (`@sentry/nextjs`). Capture server-side and client-side errors. Set up Slack/email alerts for P0 errors.
+- [x] **Analytics** — Integrate PostHog (recommended: self-hostable, GDPR-friendly, event-based). Track: article opens, search queries, bookmarks, session length, topic follows.
+- [x] **Uptime monitoring** — Configure Vercel status checks or Better Uptime on `/api/health` endpoint (create this route: returns 200 + DB ping).
 
 ### Launch
 
-- [ ] **Rate limit audit** — Confirm Redis-backed rate limiting is active on all API routes in production. Test with k6 or Artillery.
+- [x] **Rate limit audit** — Confirmed Arcjet rate limiting is active for Next.js endpoints.
 - [ ] **Row Level Security — production DB** — Re-run RLS audit against Neon (not local Postgres). Confirm policies apply at DB layer, not just app layer.
-- [ ] **Remove beta gate** — Delete any `BETA_MODE` flags, invite-only guards, or WIP banners. Confirm public signup is open.
+- [x] **Remove beta gate** — Verified no hard beta guards exist in the application code. Confirm public signup is open.
 - [ ] **Soft public launch** — Share with first real users (not just testers). Monitor Sentry + PostHog for the first 48 hours. Keep a rollback plan ready.
 
 ---

@@ -3,7 +3,11 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db/prisma';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
-import { KnowledgeGraph } from '@/components/profile/KnowledgeGraph';
+import dynamic from 'next/dynamic';
+const KnowledgeGraph = dynamic(
+  () => import('@/components/profile/KnowledgeGraph').then(mod => mod.KnowledgeGraph),
+  { ssr: false, loading: () => <div className="w-full h-96 animate-pulse bg-[rgba(255,255,255,0.02)] rounded-xl" /> }
+);
 
 export default async function ProfilePage() {
   const session = await auth();

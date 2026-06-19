@@ -160,7 +160,12 @@ export async function getRecommendations(title: string): Promise<Article[]> {
       return [];
     }
 
-    const pages = Object.values(data.query.pages) as any[];
+    const pages = Object.values(data.query.pages) as Array<{ 
+      title: string; 
+      extract?: string; 
+      categories?: Array<{ title: string }>; 
+      thumbnail?: { source: string; width: number; height: number };
+    }>;
     
     const articles = pages.map((page) => {
       const pageTitleEncoded = encodeURIComponent(page.title);
@@ -168,7 +173,7 @@ export async function getRecommendations(title: string): Promise<Article[]> {
       const extractText = extractHtml.replace(/<[^>]*>?/gm, ''); 
       
       const categories = page.categories 
-        ? page.categories.map((c: any) => c.title.replace(/^Category:/, ''))
+        ? page.categories.map((c: { title: string }) => c.title.replace(/^Category:/, ''))
         : [];
 
       return {
@@ -241,7 +246,16 @@ export async function getFullArticle(title: string): Promise<Article | null> {
   }
 }
 
-export async function searchArticles(query: string, limit: number = 10): Promise<any[]> {
+export interface SearchResult {
+  id: number;
+  key: string;
+  title: string;
+  excerpt: string;
+  description?: string;
+  thumbnail?: { url: string; width?: number; height?: number } | null;
+}
+
+export async function searchArticles(query: string, limit: number = 10): Promise<SearchResult[]> {
   try {
     const url = `https://en.wikipedia.org/w/rest.php/v1/search/page?q=${encodeURIComponent(query.trim())}&limit=${limit}`;
     const res = await fetchWithRetry(url, {

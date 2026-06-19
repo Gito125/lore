@@ -72,10 +72,10 @@ export function LikeButton({ articleId, title }: LikeButtonProps) {
       <AnimatePresence mode="wait">
         <motion.div
           key={isLiked ? 'liked' : 'unliked'}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          initial={{ scale: 0.5, opacity: 0, rotate: isLiked ? -15 : 15 }}
+          animate={{ scale: 1, opacity: 1, rotate: 0 }}
+          exit={{ scale: 0.5, opacity: 0, transition: { duration: 0.1 } }}
+          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
           <Heart size={16} className={clsx(isLiked && 'fill-current')} />
         </motion.div>

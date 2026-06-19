@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+import { CSPostHogProvider } from "@/components/providers/PostHogProvider";
+import SuspendedPostHogPageView from "@/components/providers/PostHogPageView";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,10 +38,13 @@ export default function RootLayout({
       className={`${ebGaramond.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
       data-theme="midnight"
     >
-      <body className="min-h-full flex flex-col font-sans">
-        <ServiceWorkerRegistration />
-        {children}
-      </body>
+      <CSPostHogProvider>
+        <body className="min-h-full flex flex-col font-sans">
+          <SuspendedPostHogPageView />
+          <ServiceWorkerRegistration />
+          {children}
+        </body>
+      </CSPostHogProvider>
     </html>
   );
 }

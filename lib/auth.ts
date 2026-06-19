@@ -17,7 +17,7 @@ const customAdapter = {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: customAdapter,
   trustHost: true,
-  session: { strategy: process.env.NODE_ENV !== 'production' ? 'jwt' : 'database' },
+  session: { strategy: 'database' },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
