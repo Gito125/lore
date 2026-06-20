@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <h1>📖 Lore</h1>
+  <p><strong>Wikipedia as a Social Experience.</strong><br/>
+  <i>The world's smartest feed. A place where scrolling makes you smarter.</i></p>
+</div>
 
-## Getting Started
+<br />
 
-First, run the development server:
+![Lore App](./public/images/lore-feed.png)
+
+> **Lore** is a next-generation knowledge discovery platform that reimagines Wikipedia as an intelligent, personalized social media feed. Where platforms like X.com, Instagram, and TikTok compete for attention with noise, Lore competes with *signal* — surfacing humanity's most verified, deep knowledge in a format engineered for modern consumption.
+
+## ✨ Features
+
+- **Intelligent Algorithm:** A multi-signal scoring engine with an interest graph, serendipity injection, and TF-IDF semantic similarity.
+- **Dark Editorial Design:** A beautiful, focus-driven UI built with Tailwind CSS, featuring EB Garamond for a premium reading experience.
+- **Cinematic Motion:** Powered by Framer Motion (UI fabric) and GSAP (signature cinematic moments like the Knowledge Graph visualization).
+- **Personal Knowledge Base:** Bookmarks, reading history, weekly digests, and topic following.
+- **Social Sharing:** X/Twitter thread auto-generator, WhatsApp OG share cards, and Instagram Story generators.
+- **PWA & Offline Support:** Native-like experience with offline caching for your recent articles and bookmarks.
+
+## 🛠️ Tech Stack
+
+Lore is built on a modern, bleeding-edge stack:
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript (Strict Mode)
+- **Styling:** TailwindCSS + CSS Variables
+- **Database:** PostgreSQL + Prisma ORM
+- **Authentication:** Auth.js v5
+- **Caching:** Upstash Redis
+- **Motion:** Framer Motion + GSAP
+- **Security:** Arcjet Rate Limiting
+- **Analytics:** PostHog
+
+## 🚀 Getting Started
+
+Follow these steps to run Lore locally.
+
+### Prerequisites
+
+- Node.js 20+
+- `pnpm` (This project uses `pnpm` exclusively)
+- PostgreSQL (running locally or via Docker)
+
+### 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Gito125/lore.git
+cd lore
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Setup Environment Variables
 
-## Learn More
+Copy the example environment file and fill in your details (Database URL, Auth secrets, etc.):
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cp .env.example .env.local
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Setup Database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Initialize the Prisma client and push the schema to your database:
 
-## Deploy on Vercel
+```bash
+pnpm prisma generate
+pnpm prisma migrate dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. Start the Development Server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3005](http://localhost:3005) with your browser to see the result.
+
+## 🧪 Testing
+
+Lore maintains high test coverage to ensure a reliable experience:
+
+- **Unit/Integration:** `pnpm test` (Powered by Vitest)
+- **E2E:** `pnpm test:e2e` (Powered by Playwright)
+
+## 🗺️ Architecture & Documentation
+
+For a deeper dive into how Lore is built, check out our documentation:
+
+- [Vision & Strategy](./docs/01-vision.md)
+- [Mini SRS](./docs/02-mini-srs.md)
+- [Architecture Overview](./docs/03-architecture.md)
+- [Design Philosophy](./docs/04-design.md)
+- [Folder Structure](./docs/05-folder-structure.md)
+- [Build Log & Progress](./docs/PROGRESS.md)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read through our documentation and check the `PROGRESS.md` to see what we're currently working on. Ensure you follow our strict agent guidelines outlined in `AGENTS.md`.
+
+![Lore Image](./public/images/lore-loading.png)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

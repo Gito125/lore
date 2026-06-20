@@ -22,6 +22,24 @@ export const metadata: Metadata = {
   title: "Lore",
   description: "Wikipedia as a Social Experience",
   manifest: "/manifest.json",
+  openGraph: {
+    title: "Lore",
+    description: "Wikipedia as a Social Experience",
+    images: [
+      {
+        url: "/images/lore-feed.png",
+        width: 1200,
+        height: 630,
+        alt: "Lore App Feed",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lore",
+    description: "Wikipedia as a Social Experience",
+    images: ["/images/lore-feed.png"],
+  },
 };
 
 import { CSPostHogProvider } from "@/components/providers/PostHogProvider";
